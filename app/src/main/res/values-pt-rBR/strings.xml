@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lista de Compras</string>
+    <string name="addProduct">Adicionar Produto</string>
+    <string name="cPassword">Confirmar Senha:</string>
+    <string name="cancel">Cancelar</string>
+    <string name="create">Criar</string>
+    <string name="deleteList">Excluir Lista</string>
+    <string name="email">E-mail:</string>
+    <string name="listName">Nome da lista</string>
+    <string name="lists">Listas:</string>
+    <string name="login">Entrar</string>
+    <string name="name">Nome Completo:</string>
+    <string name="password">Senha:</string>
+    <string name="removeProduct">Remover Produto</string>
+    <string name="singup">Cadastrar</string>
+</resources>
