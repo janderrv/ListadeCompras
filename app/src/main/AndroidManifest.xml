@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".NewListActivity"></activity>
+        <activity android:name=".ListActivity" />
         <activity android:name=".ListsActivity" />
         <activity android:name=".SingupActivity" />
         <activity android:name=".LoginActivity">
