@@ -14,4 +14,5 @@
     <string name="password">Senha:</string>
     <string name="removeProduct">Remover Produto</string>
     <string name="singup">Cadastrar</string>
+    <string name="productName">Nome do Produto</string>
 </resources>

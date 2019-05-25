@@ -14,7 +14,7 @@
         tools:layout_editor_absoluteY="8dp">
 
         <EditText
-            android:id="@+id/edtListName"
+            android:id="@+id/edtProductName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -39,6 +39,7 @@
             android:orientation="horizontal">
 
             <Button
+                style="?android:buttonBarStyle"
                 android:id="@+id/btnAddProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,6 +47,7 @@
                 android:text="@string/addProduct" />
 
             <Button
+                style="?android:buttonBarStyle"
                 android:id="@+id/btnRemoveProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,6 +55,7 @@
                 android:text="@string/removeProduct" />
 
             <Button
+                style="?android:buttonBarStyle"
                 android:id="@+id/btnDeleteList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

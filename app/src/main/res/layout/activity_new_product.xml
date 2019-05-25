@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewListActivity">
+    tools:context=".NewProductActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -24,7 +24,7 @@
             android:id="@+id/txtProductName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/listName" />
+            android:text="@string/productName" />
 
         <EditText
             android:id="@+id/edtProductName"
@@ -39,16 +39,16 @@
             android:orientation="horizontal">
 
             <Button
-                style="?android:buttonBarStyle"
                 android:id="@+id/btnCreate"
+                style="?android:buttonBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/create" />
 
             <Button
-                style="?android:buttonBarStyle"
                 android:id="@+id/btnCancel"
+                style="?android:buttonBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

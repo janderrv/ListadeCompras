@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Lista de Compras</string>
-    <string name="email">E-mail:</string>
-    <string name="password">Senha:</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
     <string name="login">Entrar</string>
-    <string name="name">Nome Completo:</string>
+    <string name="name">Nome Completo</string>
     <string name="cPassword">Confirmar Senha:</string>
     <string name="singup">Cadastrar</string>
     <string name="cancel">Cancelar</string>
@@ -13,4 +13,5 @@
     <string name="removeProduct">Remover Produto</string>
     <string name="deleteList">Excluir Lista</string>
     <string name="addProduct">Adicionar Produto</string>
+    <string name="productName">Nome do Produto</string>
 </resources>
