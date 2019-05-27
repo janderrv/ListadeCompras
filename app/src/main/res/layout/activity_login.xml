@@ -58,6 +58,7 @@
 
             <Button
                 android:id="@+id/btnLogin"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -69,12 +70,14 @@
 
             <Button
                 android:id="@+id/btnSingup"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
+                android:onClick="abrirTelaCadastro"
                 android:text="@string/singup"
                 app:layout_goneMarginTop="10dp" />
         </LinearLayout>

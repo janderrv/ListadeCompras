@@ -1,8 +1,11 @@
 package com.example.listadecompras;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class PostsDatabaseHelper extends SQLiteOpenHelper {
     // Database Info
@@ -26,50 +29,39 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
     // Produto colunas
     private static final String KEY_PRODUTO_ID = "idProduto";
     private static final String KEY_PRODUTO_NOME = "nomeProduto";
+    private static final String TAG = "DataBAse";
     private static PostsDatabaseHelper sInstance;
 
-
-    /**
-     * Constructor should be private to prevent direct instantiation.
-     * Make a call to the static method "getInstance()" instead.
-     */
     private PostsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // Padrao singleton
+    // Usando padrao singleton
     public static synchronized PostsDatabaseHelper getInstance(Context context) {
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
-        // See this article for more information: http://bit.ly/6LRzfx
         if (sInstance == null) {
             sInstance = new PostsDatabaseHelper(context.getApplicationContext());
         }
         return sInstance;
     }
 
-    // Called when the database connection is being configured.
-    // Configure database settings for things like foreign key support, write-ahead logging, etc.
     @Override
     public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
         db.setForeignKeyConstraintsEnabled(true);
     }
 
-    // Called when the database is created for the FIRST time.
-    // If a database already exists on disk with the same DATABASE_NAME, this method will NOT be called.
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USUARIOS_TABLE = "CREATE TABLE " + TB_USUARIOS +
                 "(" +
-                KEY_USUARIO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + // Define a primary key
+                KEY_USUARIO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 KEY_USUARIO_NOME + " VARCHAR(50) NOT NULL, " +
                 KEY_USUARIO_EMAIL + " VARCHAR(50) NOT NULL, " +
                 KEY_USUARIO_SENHA + " VARCHAR(20) NOT NULL" +
                 ")";
 
 
-        String CREATE_PRODUTOS_TABLE = "CREATE TABLE " + TB_LISTA_DE_COMPRAS +
+        String CREATE_PRODUTOS_TABLE = "CREATE TABLE " + TB_PRODUTOS +
                 "(" +
                 KEY_PRODUTO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 KEY_PRODUTO_NOME + " VARCHAR (50) NOT NULL" +
@@ -88,17 +80,56 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_LISTA_DE_COMPRAS_TABLE);
     }
 
-    // Called when the database needs to be upgraded.
-    // This method will only be called if a database already exists on disk with the same DATABASE_NAME,
-    // but the DATABASE_VERSION is different than the version of the database that exists on disk.
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != newVersion) {
-            // Simplest implementation is to drop all old tables and recreate them
             db.execSQL("DROP TABLE IF EXISTS " + TB_USUARIOS);
             db.execSQL("DROP TABLE IF EXISTS " + TB_PRODUTOS);
             db.execSQL("DROP TABLE IF EXISTS " + TB_LISTA_DE_COMPRAS);
             onCreate(db);
         }
+    }
+
+    // Insert usuario no db
+    public void addUsuario(Usuario usuario) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_USUARIO_NOME, usuario.getNome());
+        values.put(KEY_USUARIO_EMAIL, usuario.getEmail());
+        values.put(KEY_USUARIO_SENHA, usuario.getSenha());
+
+        try {
+            Cursor cursor = db.rawQuery("select * from " + TB_USUARIOS + " where " + KEY_USUARIO_EMAIL +
+                    " like ?", new String[]{usuario.getEmail()});
+            if (cursor.moveToFirst()) {
+                Log.e(TAG, "Email já existe");
+            } else {
+                db.insertOrThrow(TB_USUARIOS, null, values);
+                db.setTransactionSuccessful();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao adicionar usuário");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    //Consulta se email já está no banco de dados
+    public boolean consultaEmail(Usuario usuario) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_USUARIO_EMAIL, usuario.getEmail());
+
+        Cursor cursor = db.rawQuery("select * from " + TB_USUARIOS + " where " + KEY_USUARIO_EMAIL +
+                " like ?", new String[]{usuario.getEmail()});
+        cursor.close();
+        return cursor.moveToFirst();
     }
 }

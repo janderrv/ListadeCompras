@@ -1,5 +1,5 @@
 package com.example.listadecompras;
 
-public class ModelProdutos {
+public class Produto {
     public String produtoNome;
 }

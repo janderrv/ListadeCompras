@@ -1,7 +1,7 @@
 package com.example.listadecompras;
 
 public class ModelListaDeCompras {
-    public ModelUsuarios usuario;
-    public ModelProdutos produto;
+    public Usuario usuario;
+    public Produto produto;
     public String nomeLista;
 }
