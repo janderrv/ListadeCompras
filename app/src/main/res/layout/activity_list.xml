@@ -14,7 +14,7 @@
         tools:layout_editor_absoluteY="8dp">
 
         <EditText
-            android:id="@+id/edtProductName"
+            android:id="@+id/edtListName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

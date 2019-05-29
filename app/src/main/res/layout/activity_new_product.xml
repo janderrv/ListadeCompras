@@ -21,13 +21,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtProductName"
+            android:id="@+id/txtListName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/productName" />
 
         <EditText
-            android:id="@+id/edtProductName"
+            android:id="@+id/edtListName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
