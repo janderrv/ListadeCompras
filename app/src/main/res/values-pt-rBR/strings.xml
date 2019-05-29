@@ -15,4 +15,7 @@
     <string name="removeProduct">Remover Produto</string>
     <string name="singup">Cadastrar</string>
     <string name="productName">Nome do Produto</string>
+    <string name="welcome">"Bem vindo, "</string>
+    <string name="createList">Criar Lista de Compras</string>
+    <string name="searchList">Procurar Lista de Compras</string>
 </resources>

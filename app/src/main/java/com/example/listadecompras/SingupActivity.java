@@ -2,6 +2,7 @@ package com.example.listadecompras;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +26,7 @@ public class SingupActivity extends AppCompatActivity {
         btnCadastrar = findViewById(R.id.btnSingup);
         btnCancelar = findViewById(R.id.btnCancel);
 
-        final PostsDatabaseHelper db = PostsDatabaseHelper.getInstance(this);
+        final DatabaseHelper db = DatabaseHelper.getInstance(this);
 
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +56,8 @@ public class SingupActivity extends AppCompatActivity {
                             limparCampos();
                         }
                     } catch (Exception e) {
+                        Log.d("singup", "erro cadastro");
+                        e.printStackTrace();
                         Toast.makeText(SingupActivity.this, "Erro ao cadastrar usuário", Toast.LENGTH_LONG).show();
                     }
                 }

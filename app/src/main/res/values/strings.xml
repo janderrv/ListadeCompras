@@ -14,4 +14,7 @@
     <string name="deleteList">Excluir Lista</string>
     <string name="addProduct">Adicionar Produto</string>
     <string name="productName">Nome do Produto</string>
+    <string name="welcome">Bem vindo, </string>
+    <string name="createList">Criar Lista de Compras</string>
+    <string name="searchList">Procurar Lista de Compras</string>
 </resources>

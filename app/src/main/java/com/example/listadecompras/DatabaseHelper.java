@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class PostsDatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "db_listadecompras";
     private static final int DATABASE_VERSION = 1;
@@ -30,16 +30,16 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_PRODUTO_ID = "idProduto";
     private static final String KEY_PRODUTO_NOME = "nomeProduto";
     private static final String TAG = "DataBAse";
-    private static PostsDatabaseHelper sInstance;
+    private static DatabaseHelper sInstance;
 
-    private PostsDatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     // Usando padrao singleton
-    public static synchronized PostsDatabaseHelper getInstance(Context context) {
+    public static synchronized DatabaseHelper getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new PostsDatabaseHelper(context.getApplicationContext());
+            sInstance = new DatabaseHelper(context.getApplicationContext());
         }
         return sInstance;
     }
@@ -124,12 +124,67 @@ public class PostsDatabaseHelper extends SQLiteOpenHelper {
 
         db.beginTransaction();
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_USUARIO_EMAIL, usuario.getEmail());
+        Cursor cursor = db.rawQuery("select * from " + TB_USUARIOS + " where " + KEY_USUARIO_EMAIL +
+                " like ?", new String[]{usuario.getEmail()});
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        }
+        return false;
+    }
+
+    // Validar login
+    public boolean validarLogin(Usuario usuario) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+
+
+        Cursor cursor = db.rawQuery("select * from " + TB_USUARIOS + " where " + KEY_USUARIO_EMAIL +
+                " like ?" + " AND " + KEY_USUARIO_SENHA + " like ?", new String[]{usuario.getEmail(), usuario.getSenha()});
+        if (cursor.getCount() > 0) {
+            cursor.close();
+            return true;
+        }
+        cursor.close();
+        return false;
+    }
+
+    //Pegar id
+    public String pegarId(Usuario usuario) {
+        SQLiteDatabase db = getWritableDatabase();
+        String id = "null";
+
+        db.beginTransaction();
+
+        Cursor cursor = db.rawQuery("select * from " + TB_USUARIOS + " where " + KEY_USUARIO_EMAIL +
+                " like ?" + " AND " + KEY_USUARIO_SENHA + " like ?", new String[]{usuario.getEmail(), usuario.getSenha()});
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            id = cursor.getString(0);
+            cursor.close();
+            return id;
+        }
+        return id;
+    }
+
+    //Pegar nome
+    public String pegarNome(Usuario usuario) {
+        SQLiteDatabase db = getWritableDatabase();
+        String nome = "null";
+
+        db.beginTransaction();
 
         Cursor cursor = db.rawQuery("select * from " + TB_USUARIOS + " where " + KEY_USUARIO_EMAIL +
                 " like ?", new String[]{usuario.getEmail()});
-        cursor.close();
-        return cursor.moveToFirst();
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            nome = cursor.getString(1);
+            cursor.close();
+            return nome;
+        }
+        return nome;
     }
 }
