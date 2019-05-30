@@ -27,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
         id = dados.getString("id");
         email = dados.getString("email");
 
-        Usuario usuario = new Usuario("", email, "", "");
+        ModelUsuario usuario = new ModelUsuario("", email, "", "");
         DatabaseHelper db = DatabaseHelper.getInstance(this);
         nome = db.pegarNome(usuario);
 
@@ -42,7 +42,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void searchList(View view) {
+        Bundle dados = getIntent().getExtras();
         Intent intent = new Intent(this, ListsActivity.class);
+        intent.putExtras(dados);
         startActivity(intent);
     }
 }

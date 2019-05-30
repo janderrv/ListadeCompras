@@ -1,7 +1,10 @@
 package com.example.listadecompras;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -17,7 +20,9 @@ public class ListsActivity extends AppCompatActivity {
     SearchView searchList;
 
     ArrayAdapter<String> adapter;
-    ArrayList<String> arrayList;
+    ArrayList<String> arrayList, arrayListId, arrayListNome;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +33,11 @@ public class ListsActivity extends AppCompatActivity {
         btnCreateList1 = findViewById(R.id.btnCreateList1);
         btnCanceList1 = findViewById(R.id.btnCancelList1);
         searchList = findViewById(R.id.searchList);
+        Bundle dados = getIntent().getExtras();
 
-        listarListas();
+        listarListas(dados.getString("id"));
 
         searchList.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -42,18 +46,34 @@ public class ListsActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 adapter.getFilter().filter(newText);
-                //bd.filtrarListas(newText);
                 return false;
+            }
+        });
+
+        listLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle dadosx = new Bundle();
+                String idLista = arrayListId.get(position);
+                String nomeLista = arrayListNome.get(position);
+                dadosx.putString("idLista", idLista);
+                dadosx.putString("nomeLista", nomeLista);
+                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                intent.putExtras(dadosx);
+                startActivity(intent);
+
             }
         });
     }
 
-    public void listarListas() {
+    public void listarListas(String id) {
         DatabaseHelper bd = DatabaseHelper.getInstance(this);
 
-        List<ListaDeCompras> lista = bd.listarListas();
+        List<ModelListaDeCompras> lista = bd.listarListas(id);
 
         arrayList = new ArrayList<>();
+        arrayListId = new ArrayList<>();
+        arrayListNome = new ArrayList<>();
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
 
@@ -61,9 +81,11 @@ public class ListsActivity extends AppCompatActivity {
         listLista.setAdapter(adapter);
 
 
-        for (ListaDeCompras c : lista) {
+        for (ModelListaDeCompras c : lista) {
             // Log.d("Lista", "\nID: " + c.getCodigo() + " Nome: " + c.getNome() + " Horas: " +c.getHoras());
-            arrayList.add(c.getIdLista() + " - " + c.getNomeLista());
+            arrayList.add(c.getNomeLista());
+            arrayListId.add(c.getIdLista());
+            arrayListNome.add(c.getNomeLista());
             adapter.notifyDataSetChanged();
         }
     }

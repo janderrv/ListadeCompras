@@ -34,8 +34,8 @@ public class NewListActivity extends AppCompatActivity {
                 if (listName.isEmpty()) {
                     edtListName.setError("Campo obrigatório!");
                 } else {
-                    Usuario usuario = new Usuario("", "", "", id);
-                    ListaDeCompras lista = new ListaDeCompras(usuario.getId(), null, listName);
+                    ModelUsuario usuario = new ModelUsuario("", "", "", id);
+                    ModelListaDeCompras lista = new ModelListaDeCompras(usuario.getId(), null, listName, "");
                     int i = 0;
                     i = bd.addListaDeCompras(lista);
                     if (i == 0) {

@@ -25,12 +25,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_LISTA_DE_COMPRAS_NOME = "nomeLista";
     private static final String KEY_LISTA_DE_COMPRAS_PRODUTO_NOME = "nomeProduto";
     private static final String KEY_LISTA_DE_COMPRAS_PRODUTO_ID_FK = "produtoId";
-    // Usuario colunas
+    // ModelUsuario colunas
     private static final String KEY_USUARIO_ID = "usuarioid";
     private static final String KEY_USUARIO_NOME = "nomeUsuario";
     private static final String KEY_USUARIO_EMAIL = "email";
     private static final String KEY_USUARIO_SENHA = "senha";
-    // Produto colunas
+    // ModelProduto colunas
     private static final String KEY_PRODUTO_ID = "produtoid";
     private static final String KEY_PRODUTO_NOME = "nomeProduto";
     private static final String TAG = "DataBAse";
@@ -80,8 +80,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 KEY_LISTA_DE_COMPRAS_ID + " INTEGER PRIMARY KEY NOT NULL," +
                 KEY_LISTA_DE_COMPRAS_NOME + " VARCHAR(45) NOT NULL," +
                 KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + " INTEGER NOT NULL," +
-                " CONSTRAINT nome_UNIQUE " +
-                " UNIQUE(" + KEY_LISTA_DE_COMPRAS_NOME + ")," +
                 " CONSTRAINT fk_listadecompra_usuario " +
                 " FOREIGN KEY(" + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + ")" +
                 " REFERENCES " + TB_USUARIOS + "(" + KEY_USUARIO_ID + ")" + ")";
@@ -133,7 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Insert usuario no db
-    public void addUsuario(Usuario usuario) {
+    public void addUsuario(ModelUsuario usuario) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -162,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Consulta se email já está no banco de dados
-    public boolean consultaEmail(Usuario usuario) {
+    public boolean consultaEmail(ModelUsuario usuario) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -179,7 +177,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Validar login
-    public boolean validarLogin(Usuario usuario) {
+    public boolean validarLogin(ModelUsuario usuario) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -198,7 +196,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Pegar id
-    public String pegarId(Usuario usuario) {
+    public String pegarId(ModelUsuario usuario) {
         SQLiteDatabase db = getWritableDatabase();
         String id = "null";
 
@@ -219,7 +217,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Pegar nome
-    public String pegarNome(Usuario usuario) {
+    public String pegarNome(ModelUsuario usuario) {
         SQLiteDatabase db = getWritableDatabase();
         String nome = "null";
 
@@ -240,7 +238,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Insert lista de compras no db
-    public int addListaDeCompras(ListaDeCompras lista) {
+    public int addListaDeCompras(ModelListaDeCompras lista) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -250,9 +248,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK, lista.getIdUsuario());
 
 
+        String query = "select * from " + TB_LISTA_DE_COMPRAS + " where " + KEY_LISTA_DE_COMPRAS_NOME +
+                " like '" + lista.getNomeLista() + "' AND " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + " like " + lista.getIdUsuario();
+
+
         try {
-            Cursor cursor = db.rawQuery("select * from " + TB_LISTA_DE_COMPRAS + " where " + KEY_LISTA_DE_COMPRAS_NOME +
-                    " like ?", new String[]{lista.getNomeLista()});
+            Cursor cursor = db.rawQuery(query, null);
             if (cursor.getCount() > 0) {
                 Log.e(TAG, "Lista já existe");
                 cursor.close();
@@ -265,6 +266,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 return 1;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Log.e(TAG, "Erro ao criar lista");
             return 2;
         } finally {
@@ -273,10 +275,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Listar listas de compras
-    public List<ListaDeCompras> listarListas() {
-        List<ListaDeCompras> listaListas = new ArrayList<ListaDeCompras>();
+    public List<ModelListaDeCompras> listarListas(String id) {
+        List<ModelListaDeCompras> listaListas = new ArrayList<ModelListaDeCompras>();
 
-        String query = "SELECT * FROM " + TB_LISTA_DE_COMPRAS;
+        String query = "SELECT * FROM " + TB_LISTA_DE_COMPRAS + " WHERE " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK +
+                " = " + id;
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -286,7 +289,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                ListaDeCompras lista = new ListaDeCompras();
+                ModelListaDeCompras lista = new ModelListaDeCompras();
                 lista.setIdLista(cursor.getString(0));
                 lista.setNomeLista(cursor.getString(1));
                 lista.setIdUsuario(cursor.getString(2));
@@ -299,12 +302,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    //Filtrar listas de compras
-    public List<ListaDeCompras> filtrarListas(String nome) {
-        List<ListaDeCompras> listaListas = new ArrayList<ListaDeCompras>();
+    //Listar produtos da lista
+    public List<ModelProduto> listarProduto(String idLista) {
+        List<ModelProduto> listaProduto = new ArrayList<ModelProduto>();
 
-        String query = "SELECT * FROM " + TB_LISTA_DE_COMPRAS + " WHERE " + KEY_LISTA_DE_COMPRAS_NOME
-                + " LIKE ?'%" + nome + "%'";
+        String query = "SELECT DISTINCT lt." + KEY_LISTA_DE_COMPRAS_ID + " FROM " + TB_LISTA_DE_COMPRAS + " lt " +
+                "JOIN " + TB_LISTADECOMPRA_HAS_PRODUTO + " hp" + " ON lt." + KEY_LISTA_DE_COMPRAS_ID + " = " +
+                "hp." + produto_idproduto + " JOIN " + TB_PRODUTOS + " pd" + " ON pd." + KEY_PRODUTO_ID +
+                " = hp." + listadecompra_idlistadecompra + " WHERE " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + " LIKE ?" + idLista;
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -314,16 +319,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                ListaDeCompras lista = new ListaDeCompras();
-                lista.setIdLista(cursor.getString(0));
-                lista.setNomeLista(cursor.getString(1));
-                lista.setIdUsuario(cursor.getString(2));
+                ModelProduto produtos = new ModelProduto();
+                produtos.setIdProduto(cursor.getString(0));
+                produtos.setProdutoNome(cursor.getString(1));
 
-                listaListas.add(lista);
+                listaProduto.add(produtos);
             } while (cursor.moveToNext());
         }
 
-        return listaListas;
+        return listaProduto;
 
     }
 }

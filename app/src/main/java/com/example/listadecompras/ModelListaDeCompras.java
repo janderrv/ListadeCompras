@@ -1,25 +1,25 @@
 package com.example.listadecompras;
 
-public class ListaDeCompras {
+public class ModelListaDeCompras {
     private String idUsuario;
     private String idProduto;
     private String nomeLista;
     private String idLista;
 
-    public ListaDeCompras(String _idUsuario, String _idProduto, String _nomeLista, String _idLista) {
+    public ModelListaDeCompras(String _idUsuario, String _idProduto, String _nomeLista, String _idLista) {
         this.nomeLista = _nomeLista;
         this.idLista = _idLista;
         this.idUsuario = _idUsuario;
         this.idProduto = _idProduto;
     }
 
-    public ListaDeCompras(String _idUsuario, String _idProduto, String _nomeLista) {
+    public ModelListaDeCompras(String _idUsuario, String _idProduto, String _nomeLista) {
         this.idUsuario = _idUsuario;
         this.idProduto = _idProduto;
         this.nomeLista = _nomeLista;
     }
 
-    public ListaDeCompras() {
+    public ModelListaDeCompras() {
 
     }
 

@@ -48,7 +48,7 @@ public class SingupActivity extends AppCompatActivity {
                     edtCSenha.setError("Senhas diferem");
                 } else {
                     try {
-                        Usuario usuario = new Usuario(nome, email, senha);
+                        ModelUsuario usuario = new ModelUsuario(nome, email, senha);
                         if (db.consultaEmail(usuario)) {
                             edtEmail.setError("E-mail já utilizado");
                         } else {
