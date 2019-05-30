@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "db_listadecomprass";
@@ -244,7 +247,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_LISTA_DE_COMPRAS_NOME, lista.getNomeLista());
-        values.put(KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK, lista.getUsuario().getId());
+        values.put(KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK, lista.getIdUsuario());
 
 
         try {
@@ -267,5 +270,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+    }
+
+    //Listar listas de compras
+    public List<ListaDeCompras> listarListas() {
+        List<ListaDeCompras> listaListas = new ArrayList<ListaDeCompras>();
+
+        String query = "SELECT * FROM " + TB_LISTA_DE_COMPRAS;
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                ListaDeCompras lista = new ListaDeCompras();
+                lista.setIdLista(cursor.getString(0));
+                lista.setNomeLista(cursor.getString(1));
+                lista.setIdUsuario(cursor.getString(2));
+
+                listaListas.add(lista);
+            } while (cursor.moveToNext());
+        }
+
+        return listaListas;
+
+    }
+
+    //Filtrar listas de compras
+    public List<ListaDeCompras> filtrarListas(String nome) {
+        List<ListaDeCompras> listaListas = new ArrayList<ListaDeCompras>();
+
+        String query = "SELECT * FROM " + TB_LISTA_DE_COMPRAS + " WHERE " + KEY_LISTA_DE_COMPRAS_NOME
+                + " LIKE ?'%" + nome + "%'";
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                ListaDeCompras lista = new ListaDeCompras();
+                lista.setIdLista(cursor.getString(0));
+                lista.setNomeLista(cursor.getString(1));
+                lista.setIdUsuario(cursor.getString(2));
+
+                listaListas.add(lista);
+            } while (cursor.moveToNext());
+        }
+
+        return listaListas;
+
     }
 }

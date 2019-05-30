@@ -1,21 +1,21 @@
 package com.example.listadecompras;
 
 public class ListaDeCompras {
-    private Usuario usuario;
-    private Produto produto;
+    private String idUsuario;
+    private String idProduto;
     private String nomeLista;
     private String idLista;
 
-    public ListaDeCompras(Usuario _usuario, Produto _produto, String _nomeLista, String _idLista) {
-        this.usuario = _usuario;
-        this.produto = _produto;
+    public ListaDeCompras(String _idUsuario, String _idProduto, String _nomeLista, String _idLista) {
         this.nomeLista = _nomeLista;
         this.idLista = _idLista;
+        this.idUsuario = _idUsuario;
+        this.idProduto = _idProduto;
     }
 
-    public ListaDeCompras(Usuario _usuario, Produto _produto, String _nomeLista) {
-        this.usuario = _usuario;
-        this.produto = _produto;
+    public ListaDeCompras(String _idUsuario, String _idProduto, String _nomeLista) {
+        this.idUsuario = _idUsuario;
+        this.idProduto = _idProduto;
         this.nomeLista = _nomeLista;
     }
 
@@ -23,12 +23,29 @@ public class ListaDeCompras {
 
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+
+    public void setNomeLista(String nomeLista) {
+        this.nomeLista = nomeLista;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public void setIdLista(String idLista) {
+        this.idLista = idLista;
+    }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getIdProduto() {
+        return idProduto;
+    }
+
+    public void setIdProduto(String idProduto) {
+        this.idProduto = idProduto;
     }
 
     public String getNomeLista() {

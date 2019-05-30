@@ -19,7 +19,7 @@ public class NewListActivity extends AppCompatActivity {
 
         edtListName = findViewById(R.id.edtListName);
         btnCreateList = findViewById(R.id.btnCreateList);
-        btnCancelList = findViewById(R.id.btnCancelList);
+        btnCancelList = findViewById(R.id.btnCancelList1);
 
         Bundle dados = getIntent().getExtras();
         String nome = dados.getString("nome");
@@ -35,7 +35,7 @@ public class NewListActivity extends AppCompatActivity {
                     edtListName.setError("Campo obrigatório!");
                 } else {
                     Usuario usuario = new Usuario("", "", "", id);
-                    ListaDeCompras lista = new ListaDeCompras(usuario, null, listName);
+                    ListaDeCompras lista = new ListaDeCompras(usuario.getId(), null, listName);
                     int i = 0;
                     i = bd.addListaDeCompras(lista);
                     if (i == 0) {
