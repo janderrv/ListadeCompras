@@ -9,10 +9,10 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Info
-    private static final String DATABASE_NAME = "db_listadecompras";
+    private static final String DATABASE_NAME = "db_listadecomprass";
     private static final int DATABASE_VERSION = 1;
     // Tabelas
-    private static final String TB_LISTA_DE_COMPRAS = "listaDeCompras";
+    private static final String TB_LISTA_DE_COMPRAS = "listadecompras";
     private static final String TB_USUARIOS = "usuarios";
     private static final String TB_PRODUTOS = "produtos";
     private static final String TB_LISTADECOMPRA_HAS_PRODUTO = "listadecompra_has_produto";
@@ -147,6 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.e(TAG, "Email já existe");
             } else {
                 db.insertOrThrow(TB_USUARIOS, null, values);
+                Log.d(TAG, "Usuário criado");
                 db.setTransactionSuccessful();
             }
             cursor.close();
@@ -167,8 +168,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " like ?", new String[]{usuario.getEmail()});
         if (cursor.moveToFirst()) {
             cursor.close();
+            db.endTransaction();
             return true;
         }
+        db.endTransaction();
         return false;
     }
 
@@ -183,9 +186,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " like ?" + " AND " + KEY_USUARIO_SENHA + " like ?", new String[]{usuario.getEmail(), usuario.getSenha()});
         if (cursor.getCount() > 0) {
             cursor.close();
+            db.endTransaction();
             return true;
         }
         cursor.close();
+        db.endTransaction();
         return false;
     }
 
@@ -203,8 +208,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             id = cursor.getString(0);
             cursor.close();
+            db.endTransaction();
             return id;
         }
+        db.endTransaction();
         return id;
     }
 
@@ -222,34 +229,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             nome = cursor.getString(1);
             cursor.close();
+            db.endTransaction();
             return nome;
         }
+        db.endTransaction();
         return nome;
     }
 
     // Insert lista de compras no db
-    public void addListaDeCompras(Usuario usuario, ListaDeCompras lista) {
+    public int addListaDeCompras(ListaDeCompras lista) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK, usuario.getId());
-        values.put(KEY_USUARIO_EMAIL, usuario.getEmail());
-        values.put(KEY_USUARIO_SENHA, usuario.getSenha());
+        values.put(KEY_LISTA_DE_COMPRAS_NOME, lista.getNomeLista());
+        values.put(KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK, lista.getUsuario().getId());
+
 
         try {
-            Cursor cursor = db.rawQuery("select * from " + TB_USUARIOS + " where " + KEY_USUARIO_EMAIL +
-                    " like ?", new String[]{usuario.getEmail()});
-            if (cursor.moveToFirst()) {
-                Log.e(TAG, "Email já existe");
+            Cursor cursor = db.rawQuery("select * from " + TB_LISTA_DE_COMPRAS + " where " + KEY_LISTA_DE_COMPRAS_NOME +
+                    " like ?", new String[]{lista.getNomeLista()});
+            if (cursor.getCount() > 0) {
+                Log.e(TAG, "Lista já existe");
+                cursor.close();
+                return 0;
             } else {
-                db.insertOrThrow(TB_USUARIOS, null, values);
+                db.insertOrThrow(TB_LISTA_DE_COMPRAS, null, values);
+                Log.d(TAG, "Lista adicionada");
                 db.setTransactionSuccessful();
+                cursor.close();
+                return 1;
             }
-            cursor.close();
         } catch (Exception e) {
-            Log.e(TAG, "Erro ao adicionar usuário");
+            Log.e(TAG, "Erro ao criar lista");
+            return 2;
         } finally {
             db.endTransaction();
         }

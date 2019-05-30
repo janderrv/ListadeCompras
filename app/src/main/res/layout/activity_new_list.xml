@@ -39,16 +39,16 @@
             android:orientation="horizontal">
 
             <Button
-                style="?android:buttonBarStyle"
-                android:id="@+id/btnCreate"
+                android:id="@+id/btnCreateList"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/create" />
 
             <Button
-                style="?android:buttonBarStyle"
-                android:id="@+id/btnCancel"
+                android:id="@+id/btnCancelList"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

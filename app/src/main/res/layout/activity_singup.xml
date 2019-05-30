@@ -92,7 +92,7 @@
                 android:text="@string/singup" />
 
             <Button
-                android:id="@+id/btnCancel"
+                android:id="@+id/btnCancelList"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

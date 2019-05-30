@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
                             Bundle dados = new Bundle();
                             dados.putString("id", db.pegarId(usuario));
                             dados.putString("email", usuario.getEmail());
+                            dados.putString("nome", usuario.getNome());
                             intent = new Intent(getApplicationContext(), HomeActivity.class);
                             intent.putExtras(dados);
                             startActivity(intent);
