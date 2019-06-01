@@ -34,8 +34,9 @@ public class ListsActivity extends AppCompatActivity {
         btnCanceList1 = findViewById(R.id.btnCancelList1);
         searchList = findViewById(R.id.searchList);
         Bundle dados = getIntent().getExtras();
+        final String idUsuario = dados.getString("id");
 
-        listarListas(dados.getString("id"));
+        listarListas(idUsuario);
 
         searchList.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -53,9 +54,10 @@ public class ListsActivity extends AppCompatActivity {
         listLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle dadosx = new Bundle();
+                Bundle dadosx = getIntent().getExtras();
                 String idLista = arrayListId.get(position);
                 String nomeLista = arrayListNome.get(position);
+                dadosx.putString("id", idUsuario);
                 dadosx.putString("idLista", idLista);
                 dadosx.putString("nomeLista", nomeLista);
                 Intent intent = new Intent(getApplicationContext(), ListActivity.class);

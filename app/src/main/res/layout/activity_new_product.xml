@@ -21,13 +21,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtListName"
+            android:id="@+id/txtProductName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/productName" />
 
         <EditText
-            android:id="@+id/edtListName"
+            android:id="@+id/edtProductName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -40,7 +40,7 @@
 
             <Button
                 android:id="@+id/btnCreateList1"
-                style="?android:buttonBarStyle"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -48,7 +48,7 @@
 
             <Button
                 android:id="@+id/btnCancelList1"
-                style="?android:buttonBarStyle"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

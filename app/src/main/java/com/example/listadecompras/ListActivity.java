@@ -1,7 +1,9 @@
 package com.example.listadecompras;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,24 +25,34 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        nomeLista = findViewById(R.id.edtListName);
+        nomeLista = findViewById(R.id.edtProductName);
         productList = findViewById(R.id.productList);
         btnAddProduct = findViewById(R.id.btnAddProduct);
         btnRemoveProduct = findViewById(R.id.btnRemoveProduct);
         btnDeletList = findViewById(R.id.btnDeleteList);
 
-        Bundle dados = getIntent().getExtras();
+        final Bundle dados = getIntent().getExtras();
         String idLista = dados.getString("idLista");
+        String idUsuario = dados.getString("id");
 
-        listarProdutos(idLista);
+        listarProdutos(idLista, idUsuario);
 
         nomeLista.setText(dados.getString("nomeLista"));
+
+        btnAddProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), NewProductActivity.class);
+                intent.putExtras(dados);
+                startActivity(intent);
+            }
+        });
     }
 
-    public void listarProdutos(String idLista) {
+    public void listarProdutos(String idLista, String idUsuario) {
         DatabaseHelper bd = DatabaseHelper.getInstance(this);
 
-        List<ModelProduto> produtos = bd.listarProduto(idLista);
+        List<ModelProduto> produtos = bd.listarProduto(idLista, idUsuario);
 
         arrayList = new ArrayList<>();
 

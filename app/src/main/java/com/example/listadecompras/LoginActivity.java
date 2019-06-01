@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class LoginActivity extends AppCompatActivity {
 
     EditText edtEmail, edtSenha;
-    Button btnLogin;
+    Button btnLogin, btnSingup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +22,21 @@ public class LoginActivity extends AppCompatActivity {
         edtEmail = findViewById(R.id.edtEmail);
         edtSenha = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        btnSingup = findViewById(R.id.btnSingup);
 
 
-        final DatabaseHelper db = DatabaseHelper.getInstance(this);
+        btnSingup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SingupActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DatabaseHelper db = DatabaseHelper.getInstance(getApplicationContext());
                 String email = edtEmail.getText().toString();
                 String senha = edtSenha.getText().toString();
                 Intent intent;
@@ -61,11 +69,5 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
-    }
-
-    public void abrirTelaCadastro(View view) {
-        Intent intent = new Intent(this, SingupActivity.class);
-        startActivity(intent);
     }
 }

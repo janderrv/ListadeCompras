@@ -17,8 +17,8 @@ public class NewListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_list);
 
-        edtListName = findViewById(R.id.edtListName);
-        btnCreateList = findViewById(R.id.btnCreateList);
+        edtListName = findViewById(R.id.edtProductName);
+        btnCreateList = findViewById(R.id.btnCreateList1);
         btnCancelList = findViewById(R.id.btnCancelList1);
 
         Bundle dados = getIntent().getExtras();
