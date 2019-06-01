@@ -19,6 +19,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+    }
+
+    @Override
+    protected void onResume() {
+
         edtEmail = findViewById(R.id.edtEmail);
         edtSenha = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -69,5 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+        super.onResume();
     }
 }

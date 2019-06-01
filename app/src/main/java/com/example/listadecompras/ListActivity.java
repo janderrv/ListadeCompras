@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +25,10 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+    }
 
+    @Override
+    protected void onResume() {
         nomeLista = findViewById(R.id.edtProductName);
         productList = findViewById(R.id.productList);
         btnAddProduct = findViewById(R.id.btnAddProduct);
@@ -33,7 +37,7 @@ public class ListActivity extends AppCompatActivity {
 
         final Bundle dados = getIntent().getExtras();
         String idLista = dados.getString("idLista");
-        String idUsuario = dados.getString("id");
+        final String idUsuario = dados.getString("id");
 
         listarProdutos(idLista, idUsuario);
 
@@ -47,7 +51,27 @@ public class ListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String produto1 = (String) productList.getItemAtPosition(position);
+
+                DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
+                ModelProduto produto = new ModelProduto(produto1, "", idUsuario);
+                Bundle produtos = new Bundle();
+                produtos.putString("idProduto", bd.pegarDadosProduto(produto).getIdProduto());
+                produtos.putString("idUsuario", bd.pegarDadosProduto(produto).getIdUsuario());
+                produtos.putString("nomeProduto", bd.pegarDadosProduto(produto).getProdutoNome());
+                Intent intent = new Intent(getApplicationContext(), EditProductActivity.class);
+                intent.putExtras(produtos);
+                startActivity(intent);
+            }
+        });
+        super.onResume();
     }
+
+
 
     public void listarProdutos(String idLista, String idUsuario) {
         DatabaseHelper bd = DatabaseHelper.getInstance(this);

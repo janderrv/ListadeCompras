@@ -37,10 +37,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     private static final String TAG = "DataBAse";
-    private static DatabaseHelper sInstance;
     // Lista de compra has produto colunas
     private static final String listadecompra_idlistadecompra = "listadecompra_idlistadecompra";
     private static final String produto_idproduto = "produto_idproduto";
+    private static DatabaseHelper sInstance;
 
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -332,9 +332,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.close();
                 return 0;
             } else {
-                // String sql = "INSERT INTO " + TB_PRODUTOS + " VALUES (null,'" +
-                // produto.getProdutoNome() + "'," + produto.getIdUsuario()+")";
-                // db.execSQL(sql);
                 db.insertOrThrow(TB_PRODUTOS, null, values);
                 Cursor cursorx = db.rawQuery("select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME +
                         " like ?" + " AND " + KEY_USUARIO_ID + " like ?", new String[]{produto.getProdutoNome(), produto.getIdUsuario()});
@@ -361,6 +358,82 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    // Update produtos no db
+    public int updateProduto(ModelProduto produto, String nome) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME +
+                " = '" + produto.getProdutoNome() + "' AND " + KEY_PRODUTO_USUARIO_ID_FK + " = " + produto.getIdUsuario();
+
+        db.beginTransaction();
+
+        try {
+            Cursor cursor = db.rawQuery(query, null);
+            if (!(cursor != null && cursor.moveToFirst())) {
+                Log.e(TAG, "Produto não existe");
+                cursor.close();
+                return 0;
+            } else {
+                query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME +
+                        " = '" + produto.getProdutoNome() + "' AND " + KEY_USUARIO_ID + " = " + produto.getIdUsuario();
+                Cursor cursorx = db.rawQuery(query, null);
+
+                String idproduto = "a";
+                String idusuario = "a";
+
+                if (cursorx.getCount() > 0) {
+                    cursorx.moveToFirst();
+                    idproduto = cursorx.getString(0);
+                    idusuario = cursorx.getString(2);
+                    cursorx.close();
+                }
+
+                db.execSQL("UPDATE " + TB_PRODUTOS + " SET " + KEY_PRODUTO_NOME + " = '" + nome +
+                        "' WHERE " + KEY_PRODUTO_ID +
+                        " = " + idproduto + " AND " + KEY_PRODUTO_USUARIO_ID_FK + " = " + idusuario);
+
+                Log.d(TAG, "Produto atualizado");
+                db.setTransactionSuccessful();
+                cursor.close();
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Erro ao atualizar produto");
+            return 2;
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    //Pegar produtoid nome e fk
+    public ModelProduto pegarDadosProduto(ModelProduto produto) {
+        String query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME + " = '" + produto.getProdutoNome() +
+                "' and " + KEY_PRODUTO_USUARIO_ID_FK + " = " + produto.getIdUsuario();
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+
+        Cursor cursor = db.rawQuery(query, null);
+        ModelProduto produto1 = new ModelProduto();
+
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                produto1.setIdProduto(cursor.getString(0));
+                produto1.setProdutoNome(cursor.getString(1));
+                produto1.setIdUsuario(produto.getIdUsuario());
+                db.setTransactionSuccessful();
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+        return produto1;
+    }
+
     //Listar produtos da lista
     public List<ModelProduto> listarProduto(String idLista, String idUsuario) {
         List<ModelProduto> listaProduto = new ArrayList<ModelProduto>();
@@ -368,11 +441,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "select " + KEY_PRODUTO_ID + "," + KEY_PRODUTO_NOME + " from " + TB_PRODUTOS + " p join "
                 + TB_LISTADECOMPRA_HAS_PRODUTO + " lh on p." + KEY_PRODUTO_ID + "= lh." + produto_idproduto +
                 " where " + KEY_PRODUTO_USUARIO_ID_FK + " = " + idUsuario;
-
-        //String query = "SELECT DISTINCT lt." + KEY_LISTA_DE_COMPRAS_ID + " FROM " + TB_LISTA_DE_COMPRAS + " lt " +
-        //      "JOIN " + TB_LISTADECOMPRA_HAS_PRODUTO + " hp" + " ON lt." + KEY_LISTA_DE_COMPRAS_ID + " = " +
-        //    "hp." + produto_idproduto + " JOIN " + TB_PRODUTOS + " pd" + " ON pd." + KEY_PRODUTO_ID +
-        //  " = hp." + listadecompra_idlistadecompra + " WHERE " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + " LIKE ?" + idLista;
 
         SQLiteDatabase db = getWritableDatabase();
 

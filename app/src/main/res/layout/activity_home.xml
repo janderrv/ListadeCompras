@@ -23,6 +23,7 @@
 
             <EditText
                 android:id="@+id/edtUsuario"
+                android:autofillHints=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -31,7 +32,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnCreateList1"
+            android:id="@+id/btnUpdateProduct"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

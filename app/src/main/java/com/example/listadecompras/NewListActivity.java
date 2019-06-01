@@ -16,13 +16,16 @@ public class NewListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_list);
+    }
+
+    @Override
+    protected void onResume() {
 
         edtListName = findViewById(R.id.edtProductName);
-        btnCreateList = findViewById(R.id.btnCreateList1);
-        btnCancelList = findViewById(R.id.btnCancelList1);
+        btnCreateList = findViewById(R.id.btnUpdateProduct);
+        btnCancelList = findViewById(R.id.btnCancelUpdate);
 
         Bundle dados = getIntent().getExtras();
-        String nome = dados.getString("nome");
         final String id = dados.getString("id");
 
         btnCreateList.setOnClickListener(new View.OnClickListener() {
@@ -36,8 +39,7 @@ public class NewListActivity extends AppCompatActivity {
                 } else {
                     ModelUsuario usuario = new ModelUsuario("", "", "", id);
                     ModelListaDeCompras lista = new ModelListaDeCompras(usuario.getId(), null, listName, "");
-                    int i = 0;
-                    i = bd.addListaDeCompras(lista);
+                    int i = bd.addListaDeCompras(lista);
                     if (i == 0) {
                         Toast.makeText(getApplicationContext(), "Lista já existe!", Toast.LENGTH_LONG).show();
                     } else if (i == 1) {
@@ -59,6 +61,7 @@ public class NewListActivity extends AppCompatActivity {
         });
 
 
+        super.onResume();
     }
 
     private void limpaCampo() {

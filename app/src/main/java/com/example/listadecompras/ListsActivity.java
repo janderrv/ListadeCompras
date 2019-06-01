@@ -28,10 +28,14 @@ public class ListsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lists);
+    }
+
+    @Override
+    protected void onResume() {
 
         listLista = findViewById(R.id.list);
-        btnCreateList1 = findViewById(R.id.btnCreateList1);
-        btnCanceList1 = findViewById(R.id.btnCancelList1);
+        btnCreateList1 = findViewById(R.id.btnUpdateProduct);
+        btnCanceList1 = findViewById(R.id.btnCancelUpdate);
         searchList = findViewById(R.id.searchList);
         Bundle dados = getIntent().getExtras();
         final String idUsuario = dados.getString("id");
@@ -66,6 +70,8 @@ public class ListsActivity extends AppCompatActivity {
 
             }
         });
+
+        super.onResume();
     }
 
     public void listarListas(String id) {

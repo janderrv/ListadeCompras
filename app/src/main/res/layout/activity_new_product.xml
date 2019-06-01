@@ -39,7 +39,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnCreateList1"
+                android:id="@+id/btnUpdateProduct"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                 android:text="@string/create" />
 
             <Button
-                android:id="@+id/btnCancelList1"
+                android:id="@+id/btnCancelUpdate"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

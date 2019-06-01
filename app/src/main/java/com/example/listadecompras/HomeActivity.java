@@ -16,15 +16,19 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+    }
+
+    @Override
+    protected void onResume() {
+
 
         edtNome = findViewById(R.id.edtUsuario);
-        btnCreateList = findViewById(R.id.btnCreateList1);
+        btnCreateList = findViewById(R.id.btnUpdateProduct);
         btnSearchList = findViewById(R.id.btnSearchList);
 
-        String id, nome, email;
+        String nome, email;
 
         final Bundle dados = getIntent().getExtras();
-        id = dados.getString("id");
         email = dados.getString("email");
 
         ModelUsuario usuario = new ModelUsuario("", email, "", "");
@@ -50,5 +54,7 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+        super.onResume();
     }
 }

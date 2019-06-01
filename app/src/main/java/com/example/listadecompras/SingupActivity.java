@@ -17,6 +17,10 @@ public class SingupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singup);
+    }
+
+    @Override
+    protected void onResume() {
 
         edtNome = findViewById(R.id.edtName);
         edtEmail = findViewById(R.id.edtEmail);
@@ -24,7 +28,7 @@ public class SingupActivity extends AppCompatActivity {
         edtCSenha = findViewById(R.id.edtCPassword);
 
         btnCadastrar = findViewById(R.id.btnSingup);
-        btnCancelar = findViewById(R.id.btnCancelList1);
+        btnCancelar = findViewById(R.id.btnCancelUpdate);
 
         final DatabaseHelper db = DatabaseHelper.getInstance(this);
 
@@ -72,6 +76,7 @@ public class SingupActivity extends AppCompatActivity {
             }
         });
 
+        super.onResume();
     }
 
     public void limparCampos() {

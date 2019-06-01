@@ -19,9 +19,15 @@ public class NewProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_product);
 
+    }
+
+
+    @Override
+    protected void onResume() {
+
         edtProductName = findViewById(R.id.edtProductName);
-        btnCreateProdutct = findViewById(R.id.btnCreateList1);
-        btnCancelProduct = findViewById(R.id.btnCancelList1);
+        btnCreateProdutct = findViewById(R.id.btnUpdateProduct);
+        btnCancelProduct = findViewById(R.id.btnCancelUpdate);
 
 
         btnCreateProdutct.setOnClickListener(new View.OnClickListener() {
@@ -29,10 +35,10 @@ public class NewProductActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String productName = edtProductName.getText().toString();
+
                 DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
                 Bundle dados = getIntent().getExtras();
-
-                String productName = edtProductName.getText().toString();
                 if (productName.isEmpty()) {
                     edtProductName.setError("Campo obrigatório");
                 } else {
@@ -54,6 +60,8 @@ public class NewProductActivity extends AppCompatActivity {
                 }
             }
         });
+
+        super.onResume();
     }
 
     public void limparCampos() {
