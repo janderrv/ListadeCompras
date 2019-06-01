@@ -18,21 +18,32 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/edtProductName"
+            android:id="@+id/edtNewProductName"
+            style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:autofillHints=""
             android:clickable="false"
+            android:cursorVisible="false"
+            android:editable="false"
             android:ems="10"
             android:enabled="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:hint="@string/listName"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:linksClickable="false"
+            android:longClickable="false"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textIsSelectable="false"
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -41,35 +52,38 @@
 
             <Button
                 android:id="@+id/btnAddProduct"
-                style="?android:attr/buttonBarButtonStyle"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="2"
+                android:fontFamily="sans-serif-condensed-light"
                 android:text="@string/addProduct"
                 android:visibility="visible" />
 
             <Button
                 android:id="@+id/btnRemoveProduct"
-                style="?android:attr/buttonBarButtonStyle"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-condensed-light"
                 android:text="@string/removeProduct"
                 android:visibility="visible" />
 
             <Button
                 android:id="@+id/btnDeleteList"
-                style="?android:attr/buttonBarButtonStyle"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-condensed-light"
                 android:text="@string/deleteList"
                 android:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="550dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
@@ -77,10 +91,18 @@
 
             <ListView
                 android:id="@+id/productList"
+                style="@style/Widget.AppCompat.ListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbarThumbHorizontal="@color/colorAccent"
+                android:scrollbarThumbVertical="@color/colorAccent"
+                android:scrollbars="vertical"
+                android:textAlignment="center">
 
             </ListView>
         </LinearLayout>

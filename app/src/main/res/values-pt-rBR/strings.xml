@@ -19,4 +19,6 @@
     <string name="createList">Criar Lista de Compras</string>
     <string name="searchList">Procurar Lista de Compras</string>
     <string name="update">Atualizar</string>
+    <string name="currentName">Nome atual</string>
+    <string name="newName">Novo nome</string>
 </resources>

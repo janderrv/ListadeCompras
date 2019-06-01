@@ -23,7 +23,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         edtNome = findViewById(R.id.edtUsuario);
-        btnCreateList = findViewById(R.id.btnUpdateProduct);
+        btnCreateList = findViewById(R.id.btnCreateProduct);
         btnSearchList = findViewById(R.id.btnSearchList);
 
         String nome, email;
@@ -56,5 +56,10 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

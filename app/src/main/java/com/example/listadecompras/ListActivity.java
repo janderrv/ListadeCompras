@@ -29,7 +29,7 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        nomeLista = findViewById(R.id.edtProductName);
+        nomeLista = findViewById(R.id.edtNewProductName);
         productList = findViewById(R.id.productList);
         btnAddProduct = findViewById(R.id.btnAddProduct);
         btnRemoveProduct = findViewById(R.id.btnRemoveProduct);

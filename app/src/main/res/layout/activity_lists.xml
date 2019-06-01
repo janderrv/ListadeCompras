@@ -36,7 +36,14 @@
             <ListView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbarThumbHorizontal="@color/colorAccent"
+                android:scrollbarThumbVertical="@color/colorAccent"
+                android:scrollbars="vertical"
+                android:textAlignment="center">
 
             </ListView>
         </LinearLayout>
@@ -47,8 +54,8 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnUpdateProduct"
-                style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/btnCreateProduct"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -56,7 +63,7 @@
 
             <Button
                 android:id="@+id/btnCancelUpdate"
-                style="?android:attr/buttonBarButtonStyle"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

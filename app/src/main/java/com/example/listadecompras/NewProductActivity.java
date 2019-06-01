@@ -25,8 +25,8 @@ public class NewProductActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
-        edtProductName = findViewById(R.id.edtProductName);
-        btnCreateProdutct = findViewById(R.id.btnUpdateProduct);
+        edtProductName = findViewById(R.id.edtNewProductName);
+        btnCreateProdutct = findViewById(R.id.btnCreateProduct);
         btnCancelProduct = findViewById(R.id.btnCancelUpdate);
 
 

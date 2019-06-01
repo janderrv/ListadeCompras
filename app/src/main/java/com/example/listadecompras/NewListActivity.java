@@ -21,8 +21,8 @@ public class NewListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
-        edtListName = findViewById(R.id.edtProductName);
-        btnCreateList = findViewById(R.id.btnUpdateProduct);
+        edtListName = findViewById(R.id.edtNewProductName);
+        btnCreateList = findViewById(R.id.btnCreateProduct);
         btnCancelList = findViewById(R.id.btnCancelUpdate);
 
         Bundle dados = getIntent().getExtras();

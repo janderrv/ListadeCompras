@@ -21,13 +21,27 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtProductName"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtCurrentName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/productName" />
+            android:text="@string/currentName" />
 
         <EditText
-            android:id="@+id/edtProductName"
+            android:id="@+id/edtCurrentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtNewProductName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/newName" />
+
+        <EditText
+            android:id="@+id/edtNewProductName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -39,8 +53,8 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnUpdateProduct"
-                style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/btnCreateProduct"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -48,7 +62,7 @@
 
             <Button
                 android:id="@+id/btnCancelUpdate"
-                style="?android:attr/buttonBarButtonStyle"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

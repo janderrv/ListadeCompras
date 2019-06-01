@@ -283,7 +283,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<ModelListaDeCompras> listaListas = new ArrayList<ModelListaDeCompras>();
 
         String query = "SELECT * FROM " + TB_LISTA_DE_COMPRAS + " WHERE " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK +
-                " = " + id;
+                " = " + id + " ORDER BY " + KEY_LISTA_DE_COMPRAS_NOME + " ASC";
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -440,7 +440,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String query = "select " + KEY_PRODUTO_ID + "," + KEY_PRODUTO_NOME + " from " + TB_PRODUTOS + " p join "
                 + TB_LISTADECOMPRA_HAS_PRODUTO + " lh on p." + KEY_PRODUTO_ID + "= lh." + produto_idproduto +
-                " where " + KEY_PRODUTO_USUARIO_ID_FK + " = " + idUsuario;
+                " where " + KEY_PRODUTO_USUARIO_ID_FK + " = " + idUsuario +
+                " AND " + listadecompra_idlistadecompra + " = " + idLista + " ORDER BY " + KEY_PRODUTO_NOME + " ASC ";
 
         SQLiteDatabase db = getWritableDatabase();
 

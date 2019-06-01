@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class EditProductActivity extends AppCompatActivity {
 
     Button btnUpdateProduct, btnCancelUpdate;
-    EditText edtProductName;
+    EditText edtProductName, edtCurrentName;
 
 
     @Override
@@ -24,9 +24,14 @@ public class EditProductActivity extends AppCompatActivity {
     protected void onResume() {
 
 
-        btnUpdateProduct = findViewById(R.id.btnUpdateProduct);
+        btnUpdateProduct = findViewById(R.id.btnCreateProduct);
         btnCancelUpdate = findViewById(R.id.btnCancelUpdate);
-        edtProductName = findViewById(R.id.edtProductName);
+        edtProductName = findViewById(R.id.edtNewProductName);
+        edtCurrentName = findViewById(R.id.edtCurrentName);
+
+        final Bundle dados = getIntent().getExtras();
+
+        edtCurrentName.setText(dados.getString("nomeProduto"));
 
 
         btnUpdateProduct.setOnClickListener(new View.OnClickListener() {
@@ -35,7 +40,7 @@ public class EditProductActivity extends AppCompatActivity {
                 String productName = edtProductName.getText().toString();
 
                 DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
-                Bundle dados = getIntent().getExtras();
+
 
                 if (productName.isEmpty()) {
                     edtProductName.setError("Campo obrigatório");

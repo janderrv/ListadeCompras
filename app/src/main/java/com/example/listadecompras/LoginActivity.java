@@ -1,6 +1,8 @@
 package com.example.listadecompras;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -76,5 +78,19 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         super.onResume();
+    }
+
+    private void setSharedPrefs(Context context, String projectName, String key, String value) {
+        SharedPreferences sharedPreferences;
+        sharedPreferences = context.getSharedPreferences(projectName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    private String getSharedPrefs(Context context, String projectName, String key) {
+        SharedPreferences sharedPreferences;
+        sharedPreferences = context.getSharedPreferences(projectName, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(key, null);
     }
 }
