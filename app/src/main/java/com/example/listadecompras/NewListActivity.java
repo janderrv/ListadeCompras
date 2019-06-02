@@ -21,9 +21,9 @@ public class NewListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
-        edtListName = findViewById(R.id.edtNewProductName);
-        btnCreateList = findViewById(R.id.btnCreateProduct);
-        btnCancelList = findViewById(R.id.btnCancelUpdate);
+        edtListName = findViewById(R.id.edtNewName);
+        btnCreateList = findViewById(R.id.btnUpdate);
+        btnCancelList = findViewById(R.id.btnCancel);
 
         Bundle dados = getIntent().getExtras();
         final String id = dados.getString("id");
@@ -44,7 +44,7 @@ public class NewListActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Lista já existe!", Toast.LENGTH_LONG).show();
                     } else if (i == 1) {
                         Toast.makeText(getApplicationContext(), "Lista criada!", Toast.LENGTH_LONG).show();
-                        limpaCampo();
+                        finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "Erro ao criar lista!", Toast.LENGTH_LONG).show();
                     }
@@ -56,7 +56,7 @@ public class NewListActivity extends AppCompatActivity {
         btnCancelList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                limpaCampo();
+                finish();
             }
         });
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewProductActivity">
+    tools:context=".EditListActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -21,10 +21,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/txtCurrentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/currentName" />
+
+        <EditText
+            android:id="@+id/edtCurrentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="textPersonName" />
+
+        <TextView
             android:id="@+id/txtNewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/productName" />
+            android:text="@string/newName" />
 
         <EditText
             android:id="@+id/edtNewName"
@@ -44,7 +58,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/create" />
+                android:text="@string/update" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                style="@android:style/Widget.Material.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/delete" />
 
             <Button
                 android:id="@+id/btnCancel"

@@ -28,7 +28,7 @@ public class SingupActivity extends AppCompatActivity {
         edtCSenha = findViewById(R.id.edtCPassword);
 
         btnCadastrar = findViewById(R.id.btnSingup);
-        btnCancelar = findViewById(R.id.btnCancelUpdate);
+        btnCancelar = findViewById(R.id.btnCancel);
 
         final DatabaseHelper db = DatabaseHelper.getInstance(this);
 

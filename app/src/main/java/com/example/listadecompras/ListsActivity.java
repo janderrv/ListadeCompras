@@ -34,8 +34,8 @@ public class ListsActivity extends AppCompatActivity {
     protected void onResume() {
 
         listLista = findViewById(R.id.list);
-        btnCreateList1 = findViewById(R.id.btnCreateProduct);
-        btnCanceList1 = findViewById(R.id.btnCancelUpdate);
+        btnCreateList1 = findViewById(R.id.btnUpdate);
+        btnCanceList1 = findViewById(R.id.btnCancel);
         searchList = findViewById(R.id.searchList);
         Bundle dados = getIntent().getExtras();
         final String idUsuario = dados.getString("id");

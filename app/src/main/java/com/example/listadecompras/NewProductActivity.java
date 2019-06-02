@@ -25,9 +25,9 @@ public class NewProductActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
-        edtProductName = findViewById(R.id.edtNewProductName);
-        btnCreateProdutct = findViewById(R.id.btnCreateProduct);
-        btnCancelProduct = findViewById(R.id.btnCancelUpdate);
+        edtProductName = findViewById(R.id.edtNewName);
+        btnCreateProdutct = findViewById(R.id.btnUpdate);
+        btnCancelProduct = findViewById(R.id.btnCancel);
 
 
         btnCreateProdutct.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +58,12 @@ public class NewProductActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Erro ao adicionar produto!", Toast.LENGTH_LONG).show();
                     }
                 }
+            }
+        });
+        btnCancelProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

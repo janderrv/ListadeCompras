@@ -278,6 +278,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int deleteList(ModelListaDeCompras lista) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_LISTA_DE_COMPRAS_NOME, lista.getNomeLista());
+        values.put(KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK, lista.getIdUsuario());
+
+        String query = "select * from " + TB_LISTA_DE_COMPRAS + " where " + KEY_LISTA_DE_COMPRAS_NOME +
+                " like '" + lista.getNomeLista() + "' AND " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + " like " + lista.getIdUsuario();
+
+
+        try {
+            Cursor cursor = db.rawQuery(query, null);
+            if (!(cursor.moveToFirst())) {
+                Log.e(TAG, "Lista não existe");
+                Log.e("idlista", lista.getIdLista());
+                Log.e("nomelista", lista.getNomeLista());
+                Log.e("idUsuario", lista.getIdUsuario());
+                cursor.close();
+                return 0;
+            } else {
+                db.execSQL("DELETE FROM " + TB_LISTA_DE_COMPRAS + " WHERE " + KEY_LISTA_DE_COMPRAS_ID +
+                        " LIKE " + lista.getIdLista() + " AND " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK +
+                        " = " + lista.getIdUsuario());
+                db.execSQL("DELETE FROM " + TB_LISTADECOMPRA_HAS_PRODUTO + " WHERE " + listadecompra_idlistadecompra +
+                        " LIKE " + lista.getIdLista());
+                Log.d(TAG, "Lista excluida");
+                db.setTransactionSuccessful();
+                cursor.close();
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Erro ao deletar lista");
+            return 2;
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     //Listar listas de compras
     public List<ModelListaDeCompras> listarListas(String id) {
         List<ModelListaDeCompras> listaListas = new ArrayList<ModelListaDeCompras>();
@@ -406,6 +448,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    //Excluir produto
+    public int deleteProduct(ModelProduto produto, String idLista) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME +
+                " = '" + produto.getProdutoNome() + "' AND " + KEY_PRODUTO_USUARIO_ID_FK + " = " + produto.getIdUsuario();
+
+        db.beginTransaction();
+
+        try {
+            Cursor cursor = db.rawQuery(query, null);
+            if (!(cursor != null && cursor.moveToFirst())) {
+                Log.e(TAG, "Produto não existe");
+                cursor.close();
+                return 0;
+            } else {
+                query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME +
+                        " = '" + produto.getProdutoNome() + "' AND " + KEY_PRODUTO_USUARIO_ID_FK + " = " + produto.getIdUsuario();
+                Cursor cursorx = db.rawQuery(query, null);
+
+                String idproduto = "a";
+                String idusuario = "a";
+
+                if (cursorx.getCount() > 0) {
+                    cursorx.moveToFirst();
+                    idproduto = cursorx.getString(0);
+                    idusuario = cursorx.getString(2);
+                    cursorx.close();
+                }
+
+                db.execSQL("DELETE FROM " + TB_PRODUTOS + " where " + KEY_PRODUTO_ID + " = " +
+                        idproduto + " AND " + KEY_PRODUTO_USUARIO_ID_FK + " = " + idusuario);
+                db.execSQL("DELETE FROM " + TB_LISTADECOMPRA_HAS_PRODUTO + " where " + produto_idproduto + " = " +
+                        idproduto + " AND " + listadecompra_idlistadecompra + " = " + idLista);
+
+                Log.d(TAG, "Produto excluido");
+                db.setTransactionSuccessful();
+                cursor.close();
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Erro ao excluir produto");
+            return 2;
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     //Pegar produtoid nome e fk
     public ModelProduto pegarDadosProduto(ModelProduto produto) {
         String query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME + " = '" + produto.getProdutoNome() +
@@ -466,6 +557,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.endTransaction();
 
         return listaProduto;
+    }
 
+    // Update lista no db
+    public int updateList(ModelListaDeCompras lista, String nome) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String query = "select * from " + TB_LISTA_DE_COMPRAS + " where " + KEY_LISTA_DE_COMPRAS_NOME +
+                " = '" + lista.getNomeLista() + "' AND " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + " = " +
+                lista.getIdUsuario();
+
+        db.beginTransaction();
+
+        try {
+            Cursor cursor = db.rawQuery(query, null);
+            if (!(cursor != null && cursor.moveToFirst())) {
+                Log.e(TAG, "Lista não existe");
+                cursor.close();
+                return 0;
+            } else {
+                query = "select * from " + TB_LISTA_DE_COMPRAS + " where " + KEY_LISTA_DE_COMPRAS_NOME +
+                        " = '" + lista.getNomeLista() + "' AND " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + " = " +
+                        lista.getIdUsuario();
+                Cursor cursorx = db.rawQuery(query, null);
+
+                String idlista = "a";
+                String idusuario = "a";
+
+                if (cursorx.getCount() > 0) {
+                    cursorx.moveToFirst();
+                    idlista = cursorx.getString(0);
+                    idusuario = cursorx.getString(2);
+                    cursorx.close();
+                }
+
+                db.execSQL("UPDATE " + TB_LISTA_DE_COMPRAS + " SET " + KEY_LISTA_DE_COMPRAS_NOME + " = '" + nome +
+                        "' WHERE " + KEY_LISTA_DE_COMPRAS_ID +
+                        " = " + idlista + " AND " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + " = " + idusuario);
+
+                Log.d(TAG, "Lista atualizada");
+                db.setTransactionSuccessful();
+                cursor.close();
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Erro ao atualizar lista");
+            return 2;
+        } finally {
+            db.endTransaction();
+        }
     }
 }

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
     EditText nomeLista;
     ListView productList;
-    Button btnAddProduct, btnRemoveProduct, btnDeletList;
+    Button btnAddProduct, btnEditList, btnDeletList;
 
     ArrayAdapter<String> adapter;
     ArrayList<String> arrayList;
@@ -25,15 +26,17 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        nomeLista = findViewById(R.id.edtNewName);
+        productList = findViewById(R.id.productList);
+        btnAddProduct = findViewById(R.id.btnAddProduct);
+        btnEditList = findViewById(R.id.btnEditList);
+        btnDeletList = findViewById(R.id.btnDeleteList);
     }
 
     @Override
     protected void onResume() {
-        nomeLista = findViewById(R.id.edtNewProductName);
-        productList = findViewById(R.id.productList);
-        btnAddProduct = findViewById(R.id.btnAddProduct);
-        btnRemoveProduct = findViewById(R.id.btnRemoveProduct);
-        btnDeletList = findViewById(R.id.btnDeleteList);
+        super.onResume();
 
         final Bundle dados = getIntent().getExtras();
         String idLista = dados.getString("idLista");
@@ -63,12 +66,42 @@ public class ListActivity extends AppCompatActivity {
                 produtos.putString("idProduto", bd.pegarDadosProduto(produto).getIdProduto());
                 produtos.putString("idUsuario", bd.pegarDadosProduto(produto).getIdUsuario());
                 produtos.putString("nomeProduto", bd.pegarDadosProduto(produto).getProdutoNome());
+                produtos.putString("idLista", dados.getString("idLista"));
                 Intent intent = new Intent(getApplicationContext(), EditProductActivity.class);
                 intent.putExtras(produtos);
                 startActivity(intent);
             }
         });
-        super.onResume();
+
+        btnDeletList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
+
+                ModelListaDeCompras lista = new ModelListaDeCompras(dados.getString("id")
+                        , "", dados.getString("nomeLista"), dados.getString("idLista"));
+
+                int i = bd.deleteList(lista);
+                if (i == 0) {
+                    Toast.makeText(getApplicationContext(), "Lista não existe!", Toast.LENGTH_LONG).show();
+                } else if (i == 1) {
+                    Toast.makeText(getApplicationContext(), "Lista excluida!", Toast.LENGTH_LONG).show();
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Erro ao excluir lista!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        });
+
+        btnEditList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), EditListActivity.class);
+                intent.putExtras(dados);
+                startActivity(intent);
+            }
+        });
     }
 
 

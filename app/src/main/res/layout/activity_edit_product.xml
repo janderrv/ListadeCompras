@@ -35,13 +35,13 @@
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/txtNewProductName"
+            android:id="@+id/txtNewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/newName" />
 
         <EditText
-            android:id="@+id/edtNewProductName"
+            android:id="@+id/edtNewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -53,7 +53,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnCreateProduct"
+                android:id="@+id/btnUpdate"
                 style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -61,7 +61,15 @@
                 android:text="@string/update" />
 
             <Button
-                android:id="@+id/btnCancelUpdate"
+                android:id="@+id/btnDelete"
+                style="@android:style/Widget.Material.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/delete" />
+
+            <Button
+                android:id="@+id/btnCancel"
                 style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
