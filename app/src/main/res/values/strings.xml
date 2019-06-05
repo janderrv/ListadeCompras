@@ -22,4 +22,6 @@
     <string name="newName">Novo nome</string>
     <string name="delete">Excluir</string>
     <string name="editList">Editar Lista</string>
+    <string name="finish">Finalizar</string>
+    <string name="buy">Comprar</string>
 </resources>

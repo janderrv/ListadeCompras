@@ -4,11 +4,13 @@ public class ModelProduto {
     private String produtoNome;
     private String idProduto;
     private String idUsuario;
+    private String produtoValor;
 
     public ModelProduto(String _produtoNome, String _idProduto, String _idUsuario) {
         this.produtoNome = _produtoNome;
         this.idProduto = _idProduto;
         this.idUsuario = _idUsuario;
+        this.produtoValor = "0";
     }
 
     public ModelProduto() {
@@ -36,5 +38,13 @@ public class ModelProduto {
 
     public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public String getProdutoValor() {
+        return produtoValor;
+    }
+
+    public void setProdutoValor(String produtoValor) {
+        this.produtoValor = produtoValor;
     }
 }

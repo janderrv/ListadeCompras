@@ -13,7 +13,7 @@ import android.widget.SearchView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListsActivity extends AppCompatActivity {
+public class SelectListActivity extends AppCompatActivity {
 
     ListView listLista;
     Button btnCreateList1, btnCanceList1;
@@ -22,17 +22,16 @@ public class ListsActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     ArrayList<String> arrayList, arrayListId, arrayListNome;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lists);
+        setContentView(R.layout.activity_select_list);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
 
         listLista = findViewById(R.id.list);
         btnCreateList1 = findViewById(R.id.btnUpdate);
@@ -65,12 +64,13 @@ public class ListsActivity extends AppCompatActivity {
                 dadosx.putString("id", idUsuario);
                 dadosx.putString("idLista", idLista);
                 dadosx.putString("nomeLista", nomeLista);
-                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SelectedListActivity.class);
                 intent.putExtras(dadosx);
                 startActivity(intent);
 
             }
         });
+
     }
 
     public void listarListas(String id) {

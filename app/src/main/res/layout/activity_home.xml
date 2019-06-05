@@ -62,11 +62,11 @@
                 android:text="@string/searchList" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnComprar"
                 style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:text="@string/buy" />
         </LinearLayout>
 
     </LinearLayout>

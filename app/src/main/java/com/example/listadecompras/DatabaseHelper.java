@@ -7,33 +7,43 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Info
-    private static final String DATABASE_NAME = "abc";
+    private static final String DATABASE_NAME = "as4df6as54";
     private static final int DATABASE_VERSION = 1;
     // Tabelas
     private static final String TB_LISTA_DE_COMPRAS = "listadecompras";
     private static final String TB_USUARIOS = "usuarios";
     private static final String TB_PRODUTOS = "produtos";
     private static final String TB_LISTADECOMPRA_HAS_PRODUTO = "listadecompra_has_produto";
+    private static final String TB_COMPRAS = "compras";
     // Lista de compras colunas
     private static final String KEY_LISTA_DE_COMPRAS_ID = "idLista";
     private static final String KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK = "usuarioId";
     private static final String KEY_LISTA_DE_COMPRAS_NOME = "nomeLista";
-    private static final String KEY_LISTA_DE_COMPRAS_PRODUTO_NOME = "nomeProduto";
-    private static final String KEY_LISTA_DE_COMPRAS_PRODUTO_ID_FK = "produtoId";
-    // ModelUsuario colunas
+
+    // Usuario colunas
     private static final String KEY_USUARIO_ID = "usuarioid";
     private static final String KEY_USUARIO_NOME = "nomeUsuario";
     private static final String KEY_USUARIO_EMAIL = "email";
     private static final String KEY_USUARIO_SENHA = "senha";
-    // ModelProduto colunas
+    // Produto colunas
     private static final String KEY_PRODUTO_ID = "produtoid";
     private static final String KEY_PRODUTO_NOME = "nomeProduto";
     private static final String KEY_PRODUTO_USUARIO_ID_FK = "usuarioId";
+    private static final String KEY_PRODUTO_VALOR = "valorProduto";
+    //Compras coluna
+    private static final String KEY_COMPRA_ID = "idCompra";
+    private static final String KEY_COMPRA_NOME = "nomeCompra";
+    private static final String KEY_COMPRA_VALOR = "valorCompra";
+    private static final String KEY_COMPRA_USUARIO_ID_FK = "idUsuario";
+    private static final String KEY_COMPRA_LISTA_DE_COMPRAS_FK = "idListaDeCompras";
+    private static final String KEY_COMPRA_DATA = "dataCompra";
 
 
     private static final String TAG = "DataBAse";
@@ -88,6 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(" +
                 KEY_PRODUTO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 KEY_PRODUTO_NOME + " VARCHAR(45) NOT NULL," +
+                KEY_PRODUTO_VALOR + " DECIMAL(2,5) NOT NULL," +
                 KEY_PRODUTO_USUARIO_ID_FK + " INTEGER NOT NULL," +
                 " CONSTRAINT fk_produto_usuario1" +
                 " FOREIGN KEY(" + KEY_PRODUTO_USUARIO_ID_FK + ")" +
@@ -100,6 +111,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(" +
                 listadecompra_idlistadecompra + " INTEGER NOT NULL," +
                 produto_idproduto + " INTEGER NOT NULL" + ")";
+
+        String compra = "CREATE TABLE " + TB_COMPRAS +
+                "(" +
+                KEY_COMPRA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                KEY_COMPRA_NOME + " VARCHAR(50) NOT NULL," +
+                KEY_COMPRA_VALOR + " DECIMAL NOT NULL," +
+                KEY_COMPRA_DATA + " DATE NOT NULL," +
+                KEY_COMPRA_USUARIO_ID_FK + " INTEGER NOT NULL," +
+                " CONSTRAINT fk_compra_usuario" +
+                " FOREIGN KEY(" + KEY_COMPRA_USUARIO_ID_FK + ")" +
+                " REFERENCES " + TB_USUARIOS + "(" + KEY_USUARIO_ID + ")" +
+                ")";
 
         String index1 = " CREATE INDEX " + TB_LISTA_DE_COMPRAS + "."
                 + "fk_listadecompra_usuario_idx" + " ON " +
@@ -117,6 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(listadecompra);
         db.execSQL(produto);
         db.execSQL(hasproduto);
+        db.execSQL(compra);
         // db.execSQL(index1);
         // db.execSQL(index2);
         // db.execSQL(index3);
@@ -130,6 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TB_PRODUTOS);
             db.execSQL("DROP TABLE IF EXISTS " + TB_LISTA_DE_COMPRAS);
             db.execSQL("DROP TABLE IF EXISTS " + TB_USUARIOS);
+            db.execSQL("DROP TABLE IF EXISTS " + TB_COMPRAS);
             onCreate(db);
         }
     }
@@ -357,6 +382,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_PRODUTO_NOME, produto.getProdutoNome());
+        values.put(KEY_PRODUTO_VALOR, produto.getProdutoValor());
         values.put(KEY_PRODUTO_USUARIO_ID_FK, produto.getIdUsuario());
         ContentValues values1 = new ContentValues();
         values1.put(listadecompra_idlistadecompra, lista.getIdLista());
@@ -448,6 +474,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    //Setar valor no produto
+    public int updateValorProduto(ModelProduto produto, Double valor) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_ID +
+                " = '" + produto.getIdProduto() + "' AND " + KEY_PRODUTO_USUARIO_ID_FK + " = " + produto.getIdUsuario();
+
+        db.beginTransaction();
+
+        try {
+            Cursor cursor = db.rawQuery(query, null);
+            if (!(cursor != null && cursor.moveToFirst())) {
+                Log.e(TAG, "Produto não existe");
+                cursor.close();
+                return 0;
+            } else {
+                query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_ID +
+                        " = '" + produto.getIdProduto() + "' AND " + KEY_PRODUTO_USUARIO_ID_FK + " = " + produto.getIdUsuario();
+                Cursor cursorx = db.rawQuery(query, null);
+
+                String idproduto = "a";
+                String idusuario = "a";
+
+                if (cursorx.getCount() > 0) {
+                    cursorx.moveToFirst();
+                    idproduto = cursorx.getString(0);
+                    idusuario = cursorx.getString(3);
+                    cursorx.close();
+                }
+
+                db.execSQL("UPDATE " + TB_PRODUTOS + " SET " + KEY_PRODUTO_VALOR + " = " + valor +
+                        " WHERE " + KEY_PRODUTO_ID +
+                        " = " + idproduto + " AND " + KEY_PRODUTO_USUARIO_ID_FK + " = " + idusuario);
+
+                Log.d(TAG, "Valor atualizado");
+                db.setTransactionSuccessful();
+                cursor.close();
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Erro ao atualizar valor do produto");
+            return 2;
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     //Excluir produto
     public int deleteProduct(ModelProduto produto, String idLista) {
         SQLiteDatabase db = getWritableDatabase();
@@ -527,9 +601,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Listar produtos da lista
     public List<ModelProduto> listarProduto(String idLista, String idUsuario) {
-        List<ModelProduto> listaProduto = new ArrayList<ModelProduto>();
+        List<ModelProduto> listaProduto = new ArrayList<>();
 
-        String query = "select " + KEY_PRODUTO_ID + "," + KEY_PRODUTO_NOME + " from " + TB_PRODUTOS + " p join "
+        String query = "select " + KEY_PRODUTO_ID + "," + KEY_PRODUTO_NOME + "," + KEY_PRODUTO_VALOR + " from " + TB_PRODUTOS + " p join "
                 + TB_LISTADECOMPRA_HAS_PRODUTO + " lh on p." + KEY_PRODUTO_ID + "= lh." + produto_idproduto +
                 " where " + KEY_PRODUTO_USUARIO_ID_FK + " = " + idUsuario +
                 " AND " + listadecompra_idlistadecompra + " = " + idLista + " ORDER BY " + KEY_PRODUTO_NOME + " ASC ";
@@ -546,6 +620,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     ModelProduto produtos = new ModelProduto();
                     produtos.setIdProduto(cursor.getString(0));
                     produtos.setProdutoNome(cursor.getString(1));
+                    produtos.setProdutoValor(cursor.getString(2));
                     listaProduto.add(produtos);
                 } while (cursor.moveToNext());
             }
@@ -607,5 +682,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+    }
+
+    //Insert tabela compra
+    public void addCompra(String idUsuario, Double valor, String idLista) {
+        SQLiteDatabase db = getWritableDatabase();
+        SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
+        Date data = new Date();
+        String dataFormatada = formataData.format(data);
+
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_COMPRA_NOME, "Compra Dia: " + dataFormatada);
+        values.put(KEY_COMPRA_VALOR, valor);
+        values.put(KEY_COMPRA_DATA, dataFormatada);
+        values.put(KEY_COMPRA_USUARIO_ID_FK, idUsuario);
+
+
+        db.beginTransaction();
+        try {
+            db.insertOrThrow(TB_COMPRAS, null, values);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 }
