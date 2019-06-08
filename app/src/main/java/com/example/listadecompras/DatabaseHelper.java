@@ -142,7 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Insert usuario no db
-    public void addUsuario(ModelUsuario usuario) {
+    void addUsuario(ModelUser usuario) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -171,7 +171,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Consulta se email já está no banco de dados
-    public boolean consultaEmail(ModelUsuario usuario) {
+    boolean consultaEmail(ModelUser usuario) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -188,7 +188,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Validar login
-    public boolean validarLogin(ModelUsuario usuario) {
+    boolean validarLogin(ModelUser usuario) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -207,7 +207,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Pegar id
-    public String pegarId(ModelUsuario usuario) {
+    String pegarId(ModelUser usuario) {
         SQLiteDatabase db = getWritableDatabase();
         String id = "null";
 
@@ -228,7 +228,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Pegar nome
-    public String pegarNome(ModelUsuario usuario) {
+    String pegarNome(ModelUser usuario) {
         SQLiteDatabase db = getWritableDatabase();
         String nome = "null";
 
@@ -249,7 +249,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Insert lista de compras no db
-    public int addListaDeCompras(ModelListaDeCompras lista) {
+    int addListaDeCompras(ModelPurchaseList lista) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -285,7 +285,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public int deleteList(ModelListaDeCompras lista) {
+    int deleteList(ModelPurchaseList lista) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -328,8 +328,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Listar listas de compras
-    public List<ModelListaDeCompras> listarListas(String id) {
-        List<ModelListaDeCompras> listaListas = new ArrayList<ModelListaDeCompras>();
+    List<ModelPurchaseList> listarListas(String id) {
+        List<ModelPurchaseList> listaListas = new ArrayList<>();
 
         String query = "SELECT * FROM " + TB_LISTA_DE_COMPRAS + " WHERE " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK +
                 " = " + id + " ORDER BY " + KEY_LISTA_DE_COMPRAS_NOME + " ASC ";
@@ -342,7 +342,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                ModelListaDeCompras lista = new ModelListaDeCompras();
+                ModelPurchaseList lista = new ModelPurchaseList();
                 lista.setIdLista(cursor.getString(0));
                 lista.setNomeLista(cursor.getString(1));
                 lista.setIdUsuario(cursor.getString(2));
@@ -350,6 +350,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 listaListas.add(lista);
             } while (cursor.moveToNext());
         }
+        assert cursor != null;
         cursor.close();
         db.endTransaction();
 
@@ -358,7 +359,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Insert produtos no db
-    public int addProduto(ModelProduto produto, ModelListaDeCompras lista) {
+    int addProduto(ModelProduct produto, ModelPurchaseList lista) {
         SQLiteDatabase db = getWritableDatabase();
 
 
@@ -396,6 +397,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.insertOrThrow(TB_LISTADECOMPRA_HAS_PRODUTO, null, values1);
                 Log.d(TAG, "Produto adicionado");
                 db.setTransactionSuccessful();
+                assert cursor != null;
                 cursor.close();
                 return 1;
             }
@@ -409,7 +411,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Update produtos no db
-    public int updateProduto(ModelProduto produto, String nome) {
+    int updateProduto(ModelProduct produto, String nome) {
         SQLiteDatabase db = getWritableDatabase();
 
         String query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME +
@@ -421,6 +423,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query, null);
             if (!(cursor != null && cursor.moveToFirst())) {
                 Log.e(TAG, "Produto não existe");
+                assert cursor != null;
                 cursor.close();
                 return 0;
             } else {
@@ -457,7 +460,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Setar valor no produto
-    public int updateValorProduto(ModelProduto produto, Double valor) {
+    int updateValorProduto(ModelProduct produto, Double valor) {
         SQLiteDatabase db = getWritableDatabase();
 
         String query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_ID +
@@ -469,6 +472,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query, null);
             if (!(cursor != null && cursor.moveToFirst())) {
                 Log.e(TAG, "Produto não existe");
+                assert cursor != null;
                 cursor.close();
                 return 0;
             } else {
@@ -505,7 +509,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Excluir produto
-    public int deleteProduct(ModelProduto produto, String idLista) {
+    int deleteProduct(ModelProduct produto, String idLista) {
         SQLiteDatabase db = getWritableDatabase();
 
         String query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME +
@@ -517,6 +521,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query, null);
             if (!(cursor != null && cursor.moveToFirst())) {
                 Log.e(TAG, "Produto não existe");
+                assert cursor != null;
                 cursor.close();
                 return 0;
             } else {
@@ -554,7 +559,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Pegar produtoid nome e fk
-    public ModelProduto pegarDadosProduto(ModelProduto produto) {
+    ModelProduct pegarDadosProduto(ModelProduct produto) {
         String query = "select * from " + TB_PRODUTOS + " where " + KEY_PRODUTO_NOME + " = '" + produto.getProdutoNome() +
                 "' and " + KEY_PRODUTO_USUARIO_ID_FK + " = " + produto.getIdUsuario();
 
@@ -563,7 +568,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.beginTransaction();
 
         Cursor cursor = db.rawQuery(query, null);
-        ModelProduto produto1 = new ModelProduto();
+        ModelProduct produto1 = new ModelProduct();
 
         try {
             if (cursor != null && cursor.moveToFirst()) {
@@ -582,8 +587,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Listar produtos da lista
-    public List<ModelProduto> listarProduto(String idLista, String idUsuario) {
-        List<ModelProduto> listaProduto = new ArrayList<>();
+    List<ModelProduct> listarProduto(String idLista, String idUsuario) {
+        List<ModelProduct> listaProduto = new ArrayList<>();
 
         String query = "select " + KEY_PRODUTO_ID + "," + KEY_PRODUTO_NOME + "," + KEY_PRODUTO_VALOR + " from " + TB_PRODUTOS + " p join "
                 + TB_LISTADECOMPRA_HAS_PRODUTO + " lh on p." + KEY_PRODUTO_ID + "= lh." + produto_idproduto +
@@ -599,7 +604,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    ModelProduto produtos = new ModelProduto();
+                    ModelProduct produtos = new ModelProduct();
                     produtos.setIdProduto(cursor.getString(0));
                     produtos.setProdutoNome(cursor.getString(1));
                     produtos.setProdutoValor(Double.valueOf(cursor.getString(2)));
@@ -610,6 +615,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
+        assert cursor != null;
         cursor.close();
         db.endTransaction();
 
@@ -617,7 +623,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Update lista no db
-    public int updateList(ModelListaDeCompras lista, String nome) {
+    int updateList(ModelPurchaseList lista, String nome) {
         SQLiteDatabase db = getWritableDatabase();
 
         String query = "select * from " + TB_LISTA_DE_COMPRAS + " where " + KEY_LISTA_DE_COMPRAS_NOME +
@@ -630,6 +636,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query, null);
             if (!(cursor != null && cursor.moveToFirst())) {
                 Log.e(TAG, "Lista não existe");
+                assert cursor != null;
                 cursor.close();
                 return 0;
             } else {
@@ -667,7 +674,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Insert tabela compra
-    public void addCompra(ModelCompra compra) {
+    void addCompra(ModelPurchase compra) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -678,8 +685,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             if (cursor.moveToFirst() && (!cursor.getString(0).equals(null))) {
                 max = cursor.getString(0);
+                cursor.close();
             } else
                 max = "1";
+            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -701,8 +710,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Listar compras
-    public List<ModelCompra> listarCompras(String idUsuario) {
-        List<ModelCompra> listaCompra = new ArrayList<>();
+    List<ModelPurchase> listarCompras(String idUsuario) {
+        List<ModelPurchase> listaCompra = new ArrayList<>();
 
         String query = "select " + KEY_COMPRA_ID + "," + KEY_COMPRA_NOME + "," + KEY_COMPRA_VALOR + " from " + TB_COMPRAS +
                 " where " + KEY_COMPRA_USUARIO_ID_FK + " = " + idUsuario + " ORDER BY " + KEY_COMPRA_NOME + " ASC ";
@@ -716,7 +725,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    ModelCompra compra = new ModelCompra();
+                    ModelPurchase compra = new ModelPurchase();
                     compra.setIdCompra(cursor.getString(0));
                     compra.setNomeCompra(cursor.getString(1));
                     compra.setValor(Double.valueOf(cursor.getString(2)));
@@ -727,6 +736,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
+        assert cursor != null;
         cursor.close();
         db.endTransaction();
 

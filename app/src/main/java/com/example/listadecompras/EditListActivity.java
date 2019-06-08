@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class EditListActivity extends AppCompatActivity {
 
     private EditText edtCurrentName, edtNewName;
-    private Button btnUpdate, btnDelete, btnCancel;
+    private Button btnUpdate, btnCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +21,11 @@ public class EditListActivity extends AppCompatActivity {
         edtCurrentName = findViewById(R.id.edtCurrentName);
         edtNewName = findViewById(R.id.edtNewName);
         btnUpdate = findViewById(R.id.btnUpdate);
-        btnDelete = findViewById(R.id.btnDelete);
+        btnCancel = findViewById(R.id.btnCancel);
 
         Bundle dados = getIntent().getExtras();
 
+        assert dados != null;
         edtCurrentName.setText(dados.getString("nomeLista"));
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -39,7 +40,7 @@ public class EditListActivity extends AppCompatActivity {
                 if (listName.isEmpty()) {
                     edtCurrentName.setError("Campo obrigatório");
                 } else {
-                    ModelListaDeCompras lista = new ModelListaDeCompras(dados.getString("id"),
+                    ModelPurchaseList lista = new ModelPurchaseList(dados.getString("id"),
                             dados.getString("idProduto"), dados.getString("nomeLista"), dados.getString("idLista"));
                     Log.d("idlista", dados.getString("idLista"));
                     Log.d("idusuario", dados.getString("id"));
@@ -54,6 +55,14 @@ public class EditListActivity extends AppCompatActivity {
                         finish();
                     }
                 }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
             }
         });
     }

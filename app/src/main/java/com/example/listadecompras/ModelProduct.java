@@ -1,34 +1,35 @@
 package com.example.listadecompras;
 
-public class ModelProduto {
+public class ModelProduct {
     private String produtoNome;
     private String idProduto;
     private String idUsuario;
     private Double produtoValor;
 
-    public ModelProduto(String _produtoNome, String _idProduto, String _idUsuario) {
+    ModelProduct(String _produtoNome, String _idProduto, String _idUsuario) {
         this.produtoNome = _produtoNome;
         this.idProduto = _idProduto;
         this.idUsuario = _idUsuario;
         this.produtoValor = 0.0;
     }
 
-    public ModelProduto() {
+    ModelProduct() {
 
     }
-    public String getProdutoNome() {
+
+    String getProdutoNome() {
         return produtoNome;
     }
 
-    public void setProdutoNome(String produtoNome) {
+    void setProdutoNome(String produtoNome) {
         this.produtoNome = produtoNome;
     }
 
-    public String getIdProduto() {
+    String getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(String idProduto) {
+    void setIdProduto(String idProduto) {
         this.idProduto = idProduto;
     }
 
@@ -40,11 +41,11 @@ public class ModelProduto {
         this.idUsuario = idUsuario;
     }
 
-    public Double getProdutoValor() {
+    Double getProdutoValor() {
         return produtoValor;
     }
 
-    public void setProdutoValor(Double produtoValor) {
+    void setProdutoValor(Double produtoValor) {
         this.produtoValor = produtoValor;
     }
 }

@@ -24,6 +24,7 @@
             android:id="@+id/txtCurrentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/textColorPrimary"
             android:text="@string/currentName" />
 
         <EditText
@@ -38,6 +39,7 @@
             android:id="@+id/txtNewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/textColorPrimary"
             android:text="@string/newName" />
 
         <EditText

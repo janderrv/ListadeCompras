@@ -1,27 +1,27 @@
 package com.example.listadecompras;
 
-public class ModelUsuario {
+public class ModelUser {
     private String nome;
     private String email;
     private String senha;
     private String id;
 
 
-    public ModelUsuario(String _nome, String _email, String _senha, String _id) {
+    ModelUser(String _nome, String _email, String _senha, String _id) {
         this.nome = _nome;
         this.email = _email;
         this.senha = _senha;
         this.id = _id;
     }
 
-    public ModelUsuario(String _nome, String _email, String _senha) {
+    ModelUser(String _nome, String _email, String _senha) {
         this.nome = _nome;
         this.email = _email;
         this.senha = _senha;
     }
 
 
-    public ModelUsuario() {
+    public ModelUser() {
 
     }
 
@@ -33,7 +33,7 @@ public class ModelUsuario {
         this.nome = nome;
     }
 
-    public String getEmail() {
+    String getEmail() {
         return email;
     }
 
@@ -41,7 +41,7 @@ public class ModelUsuario {
         this.email = email;
     }
 
-    public String getSenha() {
+    String getSenha() {
         return senha;
     }
 

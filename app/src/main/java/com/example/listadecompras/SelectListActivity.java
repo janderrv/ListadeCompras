@@ -38,6 +38,7 @@ public class SelectListActivity extends AppCompatActivity {
         btnCanceList1 = findViewById(R.id.btnCancel);
         searchList = findViewById(R.id.searchList);
         Bundle dados = getIntent().getExtras();
+        assert dados != null;
         final String idUsuario = dados.getString("id");
 
         listarListas(idUsuario);
@@ -61,6 +62,7 @@ public class SelectListActivity extends AppCompatActivity {
                 Bundle dadosx = getIntent().getExtras();
                 String idLista = arrayListId.get(position);
                 String nomeLista = arrayListNome.get(position);
+                assert dadosx != null;
                 dadosx.putString("id", idUsuario);
                 dadosx.putString("idLista", idLista);
                 dadosx.putString("nomeLista", nomeLista);
@@ -76,7 +78,7 @@ public class SelectListActivity extends AppCompatActivity {
     public void listarListas(String id) {
         DatabaseHelper bd = DatabaseHelper.getInstance(this);
 
-        List<ModelListaDeCompras> lista = bd.listarListas(id);
+        List<ModelPurchaseList> lista = bd.listarListas(id);
 
         arrayList = new ArrayList<>();
         arrayListId = new ArrayList<>();
@@ -88,7 +90,7 @@ public class SelectListActivity extends AppCompatActivity {
         listLista.setAdapter(adapter);
 
 
-        for (ModelListaDeCompras c : lista) {
+        for (ModelPurchaseList c : lista) {
             // Log.d("Lista", "\nID: " + c.getCodigo() + " Nome: " + c.getNome() + " Horas: " +c.getHoras());
             arrayList.add(c.getNomeLista());
             arrayListId.add(c.getIdLista());

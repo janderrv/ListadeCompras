@@ -26,6 +26,7 @@ public class NewListActivity extends AppCompatActivity {
         btnCancelList = findViewById(R.id.btnCancel);
 
         Bundle dados = getIntent().getExtras();
+        assert dados != null;
         final String id = dados.getString("id");
 
         btnCreateList.setOnClickListener(new View.OnClickListener() {
@@ -37,8 +38,8 @@ public class NewListActivity extends AppCompatActivity {
                 if (listName.isEmpty()) {
                     edtListName.setError("Campo obrigatório!");
                 } else {
-                    ModelUsuario usuario = new ModelUsuario("", "", "", id);
-                    ModelListaDeCompras lista = new ModelListaDeCompras(usuario.getId(), null, listName, "");
+                    ModelUser usuario = new ModelUser("", "", "", id);
+                    ModelPurchaseList lista = new ModelPurchaseList(usuario.getId(), null, listName, "");
                     int i = bd.addListaDeCompras(lista);
                     if (i == 0) {
                         Toast.makeText(getApplicationContext(), "Lista já existe!", Toast.LENGTH_LONG).show();

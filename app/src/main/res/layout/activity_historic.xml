@@ -12,7 +12,18 @@
 
         <ListView
             android:id="@+id/listHistoric"
+            style="@style/Widget.AppCompat.ListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbarThumbHorizontal="@color/colorAccent"
+            android:scrollbarThumbVertical="@color/colorAccent"
+            android:scrollbars="vertical"
+            android:textAlignment="center"
+            android:textColor="@color/textColorPrimary" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

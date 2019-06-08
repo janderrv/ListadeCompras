@@ -7,7 +7,6 @@ import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +27,7 @@ public class HistoricActivity extends AppCompatActivity {
         super.onResume();
 
         final Bundle dados = getIntent().getExtras();
+        assert dados != null;
         final String idUsuario = dados.getString("id");
         listarCompras(idUsuario);
     }
@@ -37,11 +37,11 @@ public class HistoricActivity extends AppCompatActivity {
         idCompra = new ArrayList<>();
         double valor = 0;
 
-        List<ModelCompra> compras = bd.listarCompras(idUsuario);
+        List<ModelPurchase> compras = bd.listarCompras(idUsuario);
 
         HashMap<String, String> compra = new HashMap<>();
 
-        for (ModelCompra c : compras) {
+        for (ModelPurchase c : compras) {
             compra.put(c.getNomeCompra(), "R$ " + c.getValor());
         }
         List<HashMap<String, String>> listItens = new ArrayList<>();
@@ -50,12 +50,10 @@ public class HistoricActivity extends AppCompatActivity {
                 new String[]{"Compra", "Valor"},
                 new int[]{R.id.txtPurchaseName, R.id.txtPurchaseValue});
 
-        Iterator it = compra.entrySet().iterator();
-        while (it.hasNext()) {
+        for (Map.Entry<String, String> stringStringEntry : compra.entrySet()) {
             HashMap<String, String> resultMap = new HashMap<>();
-            Map.Entry pair = (Map.Entry) it.next();
-            resultMap.put("Compra", pair.getKey().toString());
-            resultMap.put("Valor", pair.getValue().toString());
+            resultMap.put("Compra", ((Map.Entry) stringStringEntry).getKey().toString());
+            resultMap.put("Valor", ((Map.Entry) stringStringEntry).getValue().toString());
             listItens.add(resultMap);
         }
 

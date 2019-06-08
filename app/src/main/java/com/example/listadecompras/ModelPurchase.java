@@ -1,6 +1,6 @@
 package com.example.listadecompras;
 
-public class ModelCompra {
+public class ModelPurchase {
     private String idCompra;
     private String nomeCompra;
     private Double valor;
@@ -8,7 +8,7 @@ public class ModelCompra {
     private String idUsuario;
     private String idLista;
 
-    public ModelCompra(String _idCompra, Double _valor, String _data, String _idUsuario, String _idLista, String _nomeCompra) {
+    ModelPurchase(String _idCompra, Double _valor, String _data, String _idUsuario, String _idLista, String _nomeCompra) {
         this.idCompra = _idCompra;
         this.valor = _valor;
         this.data = _data;
@@ -17,7 +17,7 @@ public class ModelCompra {
         this.nomeCompra = _nomeCompra;
     }
 
-    public ModelCompra() {
+    ModelPurchase() {
 
     }
 
@@ -25,23 +25,23 @@ public class ModelCompra {
         return idCompra;
     }
 
-    public void setIdCompra(String idCompra) {
+    void setIdCompra(String idCompra) {
         this.idCompra = idCompra;
     }
 
-    public Double getValor() {
+    Double getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    void setValor(Double valor) {
         this.valor = valor;
     }
 
-    public String getData() {
+    String getData() {
         return data;
     }
 
-    public void setData(String data) {
+    void setData(String data) {
         this.data = data;
     }
 
@@ -61,11 +61,11 @@ public class ModelCompra {
         this.idLista = idLista;
     }
 
-    public String getNomeCompra() {
+    String getNomeCompra() {
         return nomeCompra;
     }
 
-    public void setNomeCompra(String nomeCompra) {
+    void setNomeCompra(String nomeCompra) {
         this.nomeCompra = nomeCompra;
     }
 }

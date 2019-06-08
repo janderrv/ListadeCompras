@@ -31,9 +31,10 @@ public class HomeActivity extends AppCompatActivity {
         String nome, email;
 
         final Bundle dados = getIntent().getExtras();
+        assert dados != null;
         email = dados.getString("email");
 
-        ModelUsuario usuario = new ModelUsuario("", email, "", "");
+        ModelUser usuario = new ModelUser("", email, "", "");
         DatabaseHelper db = DatabaseHelper.getInstance(this);
         nome = db.pegarNome(usuario);
 

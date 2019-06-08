@@ -21,15 +21,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class SelectedListActivity extends AppCompatActivity {
     private EditText nomeLista, value;
     private ListView productList;
     private Double valueTotal;
-    private Button btnFinish;
+    private Button btnFinish, btnCancel;
     private ArrayList<String> idProduto;
     private ArrayList<String> valorProduto;
 
@@ -41,6 +41,7 @@ public class SelectedListActivity extends AppCompatActivity {
         nomeLista = findViewById(R.id.edtNewName);
         productList = findViewById(R.id.productList);
         btnFinish = findViewById(R.id.btnFinish);
+        btnCancel = findViewById(R.id.btnCancel);
         value = findViewById(R.id.edtValue);
         valueTotal = 0.0;
     }
@@ -50,12 +51,13 @@ public class SelectedListActivity extends AppCompatActivity {
         super.onResume();
 
         final Bundle dados = getIntent().getExtras();
+        assert dados != null;
         final String idLista = dados.getString("idLista");
         final String idUsuario = dados.getString("id");
 
         listarProdutos(idLista, idUsuario);
 
-        value.setText("R$ " + valueTotal);
+        value.setText(String.format("R$ %s", valueTotal));
         final Double[] valor = {0.0};
 
         nomeLista.setText(dados.getString("nomeLista"));
@@ -68,7 +70,7 @@ public class SelectedListActivity extends AppCompatActivity {
                 Date data = new Date();
                 String dataFormatada = formataData.format(data);
                 DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
-                ModelCompra compra = new ModelCompra("", valueTotal, dataFormatada, idUsuario, idLista, "");
+                ModelPurchase compra = new ModelPurchase("", valueTotal, dataFormatada, idUsuario, idLista, "");
                 bd.addCompra(compra);
                 Log.d("compra", "compra finalizada");
                 finish();
@@ -129,12 +131,12 @@ public class SelectedListActivity extends AppCompatActivity {
                         DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
                         HashMap produto1;
                         produto1 = (HashMap) productList.getItemAtPosition(position);
-                        String produtox = produto1.get("Produto").toString();
-                        ModelProduto produto = new ModelProduto(produtox, "", idUsuario);
+                        String produtox = Objects.requireNonNull(produto1.get("Produto")).toString();
+                        ModelProduct produto = new ModelProduct(produtox, "", idUsuario);
                         String id = bd.pegarDadosProduto(produto).getIdProduto();
                         Log.d("PRODUTO", produto1.toString());
 
-                        ModelProduto produtoz = new ModelProduto("", id, idUsuario);
+                        ModelProduct produtoz = new ModelProduct("", id, idUsuario);
                         Log.d("idproduto", id);
                         Log.d("idusuario", idUsuario);
                         Log.d("valor", String.valueOf(valor[0]));
@@ -153,6 +155,13 @@ public class SelectedListActivity extends AppCompatActivity {
             }
         });
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     public void listarProdutos(String idLista, String idUsuario) {
@@ -161,11 +170,11 @@ public class SelectedListActivity extends AppCompatActivity {
         valorProduto = new ArrayList<>();
         double valor = 0;
 
-        final List<ModelProduto> produtos = bd.listarProduto(idLista, idUsuario);
+        final List<ModelProduct> produtos = bd.listarProduto(idLista, idUsuario);
 
         HashMap<String, String> productValue = new HashMap<>();
 
-        for (ModelProduto c : produtos) {
+        for (ModelProduct c : produtos) {
             productValue.put(c.getProdutoNome(), "R$ " + c.getProdutoValor());
             idProduto.add(c.getIdProduto());
             valor = valor + (c.getProdutoValor());
@@ -178,12 +187,10 @@ public class SelectedListActivity extends AppCompatActivity {
                 new String[]{"Produto", "Valor"},
                 new int[]{R.id.txtProductName, R.id.txtProductValue});
 
-        Iterator it = productValue.entrySet().iterator();
-        while (it.hasNext()) {
+        for (Map.Entry<String, String> stringStringEntry : productValue.entrySet()) {
             HashMap<String, String> resultMap = new HashMap<>();
-            Map.Entry pair = (Map.Entry) it.next();
-            resultMap.put("Produto", pair.getKey().toString());
-            resultMap.put("Valor", pair.getValue().toString());
+            resultMap.put("Produto", ((Map.Entry) stringStringEntry).getKey().toString());
+            resultMap.put("Valor", ((Map.Entry) stringStringEntry).getValue().toString());
             listItens.add(resultMap);
         }
 

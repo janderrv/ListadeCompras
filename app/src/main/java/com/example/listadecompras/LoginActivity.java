@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                     edtSenha.setError("Campo obrigatório");
                 } else {
                     try {
-                        ModelUsuario usuario = new ModelUsuario("", email, senha, "");
+                        ModelUser usuario = new ModelUser("", email, senha, "");
                         if (db.validarLogin(usuario)) {
                             Bundle dados = new Bundle();
                             dados.putString("id", db.pegarId(usuario));

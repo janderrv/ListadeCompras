@@ -42,12 +42,11 @@ public class NewProductActivity extends AppCompatActivity {
                 if (productName.isEmpty()) {
                     edtProductName.setError("Campo obrigatório");
                 } else {
-                    ModelProduto produto = new ModelProduto(productName, "", dados.getString("id"));
+                    ModelProduct produto = new ModelProduct(productName, "", dados.getString("id"));
                     Log.d("idusuario", dados.getString("id"));
                     Log.d("idlista", dados.getString("idLista"));
-                    ModelListaDeCompras lista = new ModelListaDeCompras(dados.getString("id"), "", "", dados.getString("idLista"));
-                    int i = 0;
-                    i = bd.addProduto(produto, lista);
+                    ModelPurchaseList lista = new ModelPurchaseList(dados.getString("id"), "", "", dados.getString("idLista"));
+                    int i = bd.addProduto(produto, lista);
                     if (i == 0) {
                         Toast.makeText(getApplicationContext(), "Produto já existe!", Toast.LENGTH_LONG).show();
                     } else if (i == 1) {

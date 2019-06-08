@@ -32,6 +32,7 @@ public class EditProductActivity extends AppCompatActivity {
 
         final Bundle dados = getIntent().getExtras();
 
+        assert dados != null;
         edtCurrentName.setText(dados.getString("nomeProduto"));
 
 
@@ -46,7 +47,7 @@ public class EditProductActivity extends AppCompatActivity {
                 if (productName.isEmpty()) {
                     edtProductName.setError("Campo obrigatório");
                 } else {
-                    ModelProduto produto = new ModelProduto(dados.getString("nomeProduto"),
+                    ModelProduct produto = new ModelProduct(dados.getString("nomeProduto"),
                             dados.getString("idProduto"), dados.getString("idUsuario"));
                     Log.d("idproduto", dados.getString("idProduto"));
                     Log.d("idusuario", dados.getString("idUsuario"));
@@ -76,7 +77,7 @@ public class EditProductActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
 
-                ModelProduto produto = new ModelProduto(dados.getString("nomeProduto"),
+                ModelProduct produto = new ModelProduct(dados.getString("nomeProduto"),
                         dados.getString("idProduto"), dados.getString("idUsuario"));
                 Log.d("idproduto", dados.getString("idProduto"));
                 Log.d("idusuario", dados.getString("idUsuario"));

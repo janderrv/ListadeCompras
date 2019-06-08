@@ -61,7 +61,7 @@ public class ListActivity extends AppCompatActivity {
                 String produto1 = (String) productList.getItemAtPosition(position);
 
                 DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
-                ModelProduto produto = new ModelProduto(produto1, "", idUsuario);
+                ModelProduct produto = new ModelProduct(produto1, "", idUsuario);
                 Bundle produtos = new Bundle();
                 produtos.putString("idProduto", bd.pegarDadosProduto(produto).getIdProduto());
                 produtos.putString("idUsuario", bd.pegarDadosProduto(produto).getIdUsuario());
@@ -78,7 +78,7 @@ public class ListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
 
-                ModelListaDeCompras lista = new ModelListaDeCompras(dados.getString("id")
+                ModelPurchaseList lista = new ModelPurchaseList(dados.getString("id")
                         , "", dados.getString("nomeLista"), dados.getString("idLista"));
 
                 int i = bd.deleteList(lista);
@@ -105,11 +105,10 @@ public class ListActivity extends AppCompatActivity {
     }
 
 
-
     public void listarProdutos(String idLista, String idUsuario) {
         DatabaseHelper bd = DatabaseHelper.getInstance(this);
 
-        List<ModelProduto> produtos = bd.listarProduto(idLista, idUsuario);
+        List<ModelProduct> produtos = bd.listarProduto(idLista, idUsuario);
 
         arrayList = new ArrayList<>();
 
@@ -119,7 +118,7 @@ public class ListActivity extends AppCompatActivity {
         productList.setAdapter(adapter);
 
 
-        for (ModelProduto c : produtos) {
+        for (ModelProduct c : produtos) {
             // Log.d("Lista", "\nID: " + c.getCodigo() + " Nome: " + c.getNome() + " Horas: " +c.getHoras());
             arrayList.add(c.getProdutoNome());
             adapter.notifyDataSetChanged();
