@@ -6,8 +6,8 @@ Aplicativo de lista de compras para disciplina de progmobile
 * Login de usuário (implementada)
 * CRUD de lista de compra (implementada)
 * CRUD de produto na lista de compra (implementada)
-* Função de fazer compra (parcialmente implementada)
-* Histório de compras (não implementada)
+* Função de fazer compra (implementada)
+* Histório de compras (implementada)
 
 # Ferramentas utilizadas
 * Android Studio
