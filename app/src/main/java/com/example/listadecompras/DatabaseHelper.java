@@ -7,14 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Info
-    private static final String DATABASE_NAME = "as4df6as54";
+    private static final String DATABASE_NAME = "db_lista_de_compra";
     private static final int DATABASE_VERSION = 1;
     // Tabelas
     private static final String TB_LISTA_DE_COMPRAS = "listadecompras";
@@ -124,27 +122,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " REFERENCES " + TB_USUARIOS + "(" + KEY_USUARIO_ID + ")" +
                 ")";
 
-        String index1 = " CREATE INDEX " + TB_LISTA_DE_COMPRAS + "."
-                + "fk_listadecompra_usuario_idx" + " ON " +
-                TB_LISTA_DE_COMPRAS + "(" + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK + ")";
-
-        String index2 = " CREATE INDEX " + TB_LISTADECOMPRA_HAS_PRODUTO + "."
-                + "fk_listadecompra_has_produto_produto1_idx" + " ON " +
-                TB_LISTADECOMPRA_HAS_PRODUTO + "(" + produto_idproduto + ")";
-        String index3 = " CREATE INDEX " + TB_LISTADECOMPRA_HAS_PRODUTO + "."
-                + "fk_listadecompra_has_produto_listadecompra1_idx" + " ON " +
-                TB_LISTADECOMPRA_HAS_PRODUTO + "(" + listadecompra_idlistadecompra + ")";
-
-
         db.execSQL(usuario);
         db.execSQL(listadecompra);
         db.execSQL(produto);
         db.execSQL(hasproduto);
         db.execSQL(compra);
-        // db.execSQL(index1);
-        // db.execSQL(index2);
-        // db.execSQL(index3);
-
     }
 
     @Override
@@ -350,7 +332,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<ModelListaDeCompras> listaListas = new ArrayList<ModelListaDeCompras>();
 
         String query = "SELECT * FROM " + TB_LISTA_DE_COMPRAS + " WHERE " + KEY_LISTA_DE_COMPRAS_USUARIO_ID_FK +
-                " = " + id + " ORDER BY " + KEY_LISTA_DE_COMPRAS_NOME + " ASC";
+                " = " + id + " ORDER BY " + KEY_LISTA_DE_COMPRAS_NOME + " ASC ";
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -620,7 +602,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     ModelProduto produtos = new ModelProduto();
                     produtos.setIdProduto(cursor.getString(0));
                     produtos.setProdutoNome(cursor.getString(1));
-                    produtos.setProdutoValor(cursor.getString(2));
+                    produtos.setProdutoValor(Double.valueOf(cursor.getString(2)));
                     listaProduto.add(produtos);
                 } while (cursor.moveToNext());
             }
@@ -685,23 +667,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Insert tabela compra
-    public void addCompra(String idUsuario, Double valor, String idLista) {
+    public void addCompra(ModelCompra compra) {
         SQLiteDatabase db = getWritableDatabase();
-        SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
-        Date data = new Date();
-        String dataFormatada = formataData.format(data);
-
 
         ContentValues values = new ContentValues();
-        values.put(KEY_COMPRA_NOME, "Compra Dia: " + dataFormatada);
-        values.put(KEY_COMPRA_VALOR, valor);
-        values.put(KEY_COMPRA_DATA, dataFormatada);
-        values.put(KEY_COMPRA_USUARIO_ID_FK, idUsuario);
-
-
+        String sql = "SELECT MAX(" + KEY_COMPRA_ID + ")+1 FROM " + TB_COMPRAS;
         db.beginTransaction();
+        Cursor cursor = db.rawQuery(sql, null);
+        String max = "1";
         try {
-            db.insertOrThrow(TB_COMPRAS, null, values);
+            if (cursor.moveToFirst() && (!cursor.getString(0).equals(null))) {
+                max = cursor.getString(0);
+            } else
+                max = "1";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        values.put(KEY_COMPRA_NOME, "Compra " + max + " dia: " + compra.getData());
+        values.put(KEY_COMPRA_VALOR, compra.getValor());
+        values.put(KEY_COMPRA_DATA, compra.getData());
+        values.put(KEY_COMPRA_USUARIO_ID_FK, compra.getIdUsuario());
+
+
+        try {
+            db.insert(TB_COMPRAS, null, values);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -709,4 +699,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
     }
+
+    //Listar compras
+    public List<ModelCompra> listarCompras(String idUsuario) {
+        List<ModelCompra> listaCompra = new ArrayList<>();
+
+        String query = "select " + KEY_COMPRA_ID + "," + KEY_COMPRA_NOME + "," + KEY_COMPRA_VALOR + " from " + TB_COMPRAS +
+                " where " + KEY_COMPRA_USUARIO_ID_FK + " = " + idUsuario + " ORDER BY " + KEY_COMPRA_NOME + " ASC ";
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    ModelCompra compra = new ModelCompra();
+                    compra.setIdCompra(cursor.getString(0));
+                    compra.setNomeCompra(cursor.getString(1));
+                    compra.setValor(Double.valueOf(cursor.getString(2)));
+                    listaCompra.add(compra);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        cursor.close();
+        db.endTransaction();
+
+        return listaCompra;
+    }
+
 }

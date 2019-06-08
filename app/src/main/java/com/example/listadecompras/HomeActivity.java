@@ -10,7 +10,7 @@ import android.widget.EditText;
 public class HomeActivity extends AppCompatActivity {
 
     EditText edtNome;
-    Button btnCreateList, btnSearchList, btnComprar;
+    Button btnCreateList, btnSearchList, btnComprar, btnHistoric;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class HomeActivity extends AppCompatActivity {
         btnCreateList = findViewById(R.id.btnUpdate);
         btnSearchList = findViewById(R.id.btnSearchList);
         btnComprar = findViewById(R.id.btnComprar);
+        btnHistoric = findViewById(R.id.btnHistoric);
 
         String nome, email;
 
@@ -59,6 +60,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SelectListActivity.class);
+                intent.putExtras(dados);
+                startActivity(intent);
+            }
+        });
+        btnHistoric.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HistoricActivity.class);
                 intent.putExtras(dados);
                 startActivity(intent);
             }

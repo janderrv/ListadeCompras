@@ -4,13 +4,13 @@ public class ModelProduto {
     private String produtoNome;
     private String idProduto;
     private String idUsuario;
-    private String produtoValor;
+    private Double produtoValor;
 
     public ModelProduto(String _produtoNome, String _idProduto, String _idUsuario) {
         this.produtoNome = _produtoNome;
         this.idProduto = _idProduto;
         this.idUsuario = _idUsuario;
-        this.produtoValor = "0";
+        this.produtoValor = 0.0;
     }
 
     public ModelProduto() {
@@ -40,11 +40,11 @@ public class ModelProduto {
         this.idUsuario = idUsuario;
     }
 
-    public String getProdutoValor() {
+    public Double getProdutoValor() {
         return produtoValor;
     }
 
-    public void setProdutoValor(String produtoValor) {
+    public void setProdutoValor(Double produtoValor) {
         this.produtoValor = produtoValor;
     }
 }

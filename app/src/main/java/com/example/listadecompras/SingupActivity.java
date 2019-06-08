@@ -57,7 +57,9 @@ public class SingupActivity extends AppCompatActivity {
                             edtEmail.setError("E-mail já utilizado");
                         } else {
                             db.addUsuario(usuario);
+                            Toast.makeText(getApplicationContext(), "Cadastro efetuado", Toast.LENGTH_LONG).show();
                             limparCampos();
+                            finish();
                         }
                     } catch (Exception e) {
                         Log.d("singup", "erro cadastro");

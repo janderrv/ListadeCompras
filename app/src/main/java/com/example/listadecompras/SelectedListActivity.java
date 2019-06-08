@@ -17,7 +17,9 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -62,8 +64,12 @@ public class SelectedListActivity extends AppCompatActivity {
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
+                Date data = new Date();
+                String dataFormatada = formataData.format(data);
                 DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
-                bd.addCompra(idUsuario, valueTotal, idLista);
+                ModelCompra compra = new ModelCompra("", valueTotal, dataFormatada, idUsuario, idLista, "");
+                bd.addCompra(compra);
                 Log.d("compra", "compra finalizada");
                 finish();
             }
@@ -121,14 +127,20 @@ public class SelectedListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         DatabaseHelper bd = DatabaseHelper.getInstance(getApplicationContext());
-                        String id = idProduto.get(position);
-                        ModelProduto produto = new ModelProduto("", id, idUsuario);
+                        HashMap produto1;
+                        produto1 = (HashMap) productList.getItemAtPosition(position);
+                        String produtox = produto1.get("Produto").toString();
+                        ModelProduto produto = new ModelProduto(produtox, "", idUsuario);
+                        String id = bd.pegarDadosProduto(produto).getIdProduto();
+                        Log.d("PRODUTO", produto1.toString());
+
+                        ModelProduto produtoz = new ModelProduto("", id, idUsuario);
                         Log.d("idproduto", id);
                         Log.d("idusuario", idUsuario);
                         Log.d("valor", String.valueOf(valor[0]));
-                        bd.updateValorProduto(produto, valor[0]);
+                        bd.updateValorProduto(produtoz, valor[0]);
                         listarProdutos(idLista, idUsuario);
-                        value.setText("R$ " + valueTotal);
+                        value.setText(String.format("R$ %.2f", valueTotal));
                     }
                 });
                 dialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -156,7 +168,7 @@ public class SelectedListActivity extends AppCompatActivity {
         for (ModelProduto c : produtos) {
             productValue.put(c.getProdutoNome(), "R$ " + c.getProdutoValor());
             idProduto.add(c.getIdProduto());
-            valor = valor + Double.valueOf(c.getProdutoValor());
+            valor = valor + (c.getProdutoValor());
         }
         valueTotal = valor;
 
@@ -176,12 +188,6 @@ public class SelectedListActivity extends AppCompatActivity {
         }
 
         productList.setAdapter(adapter);
-
-
-        // for (ModelProduto c : produtos) {
-        //    // Log.d("Lista", "\nID: " + c.getCodigo() + " Nome: " + c.getNome() + " Horas: " +c.getHoras());
-        //   arrayList.add(c.getProdutoNome());
         adapter.notifyDataSetChanged();
-        // }
     }
 }
